@@ -1,17 +1,16 @@
 package client;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import server.CarType;
-import server.ICarRentalCompany;
+import server.ReservationConstraints;
+import session.IManagerSession;
+import session.IRentalSession;
 
-public class Client extends AbstractTestBooking<Object, Object> {
+public class Client extends AbstractTestBooking<IRentalSession, IManagerSession> {
 
 	/********
 	 * MAIN *
@@ -20,8 +19,8 @@ public class Client extends AbstractTestBooking<Object, Object> {
 	private final static int LOCAL = 0;
 	private final static int REMOTE = 1;
 
-	private final static String NAME = "Hertz";
-	private ICarRentalCompany icrc = null;
+	private final static String NAME1 = "Hertz";
+	private final static String NAME2 = "Dockx";
 
 	/**
 	 * The `main` method is used to launch the client application and run the test
@@ -35,7 +34,7 @@ public class Client extends AbstractTestBooking<Object, Object> {
 		int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
 
 		// An example reservation scenario on car rental company 'Hertz' would be...
-		Client client = new Client("simpleTrips", NAME, localOrRemote == 1);
+		Client client = new Client("simpleTrips", NAME1, localOrRemote == 1);
 		client.run();
 	}
 
@@ -54,40 +53,28 @@ public class Client extends AbstractTestBooking<Object, Object> {
 			} else {
 				reg = LocateRegistry.getRegistry();
 			}
-			this.icrc = (ICarRentalCompany) reg.lookup(carRentalCompanyName);
 
-			System.out.println("ICarRentalCompany located in rmi registry! = " + this.icrc);
-
-		} catch (RemoteException | NotBoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
 	@Override
-	protected Object getNewReservationSession(String name) throws Exception {
+	protected IRentalSession getNewReservationSession(String name) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected Object getNewManagerSession(String name, String carRentalName) throws Exception {
+	protected IManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * Check which car types are available in the given period (across all companies
-	 * and regions) and print this list of car types.
-	 *
-	 * @param start start time of the period
-	 * @param end   end time of the period
-	 * @param session session
-	 * @throws Exception if things go wrong, throw exception
-	 */
 	@Override
-	protected void checkForAvailableCarTypes(Object session, Date start, Date end) throws Exception {
-		Set<CarType> availableCarTypes = icrc.getAvailableCarTypes(start, end);
+	protected void checkForAvailableCarTypes(IRentalSession session, Date start, Date end) throws Exception {
+		List<CarType> availableCarTypes = session.getAvailableCarTypes(start, end);
 
 		for (CarType car : availableCarTypes) {
 			System.out.println(car);
@@ -96,28 +83,25 @@ public class Client extends AbstractTestBooking<Object, Object> {
 	}
 
 	@Override
-	protected void addQuoteToSession(Object session, String name, Date start, Date end, String carType, String region)
+	protected void addQuoteToSession(IRentalSession session, String name, Date start, Date end, String carType, String region)
 			throws Exception {
-		// TODO Auto-generated method stub
+		session.createQuote(new ReservationConstraints(start, end, carType, region));
 		
 	}
 
 	@Override
-	protected List confirmQuotes(Object session, String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	protected List confirmQuotes(IRentalSession session, String name) throws Exception {
+		return session.confirmQuotes(name);
 	}
 
 	@Override
-	protected int getNumberOfReservationsByRenter(Object ms, String clientName) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	protected int getNumberOfReservationsByRenter(IManagerSession ms, String clientName) throws Exception {
+		return ms.getNumberOfReservations(clientName);
 	}
 
 	@Override
-	protected int getNumberOfReservationsForCarType(Object ms, String carRentalName, String carType) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	protected int getNumberOfReservationsForCarType(IManagerSession ms, String carRentalName, String carType) throws Exception {
+		return ms.getNumberOfReservations(carType, carRentalName);
 	}
 
 
