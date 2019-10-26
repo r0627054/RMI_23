@@ -4,11 +4,13 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Set;
 
+import server.ICarRentalCompany;
+
 public interface IManagerSession extends Remote {
 
-	void registerCompany(String companyName) throws RemoteException;
+	void registerCompany(ICarRentalCompany company) throws RemoteException;
 
-	void unregisterCompany(String companyName) throws RemoteException;
+	void unregisterCompany(ICarRentalCompany company) throws RemoteException;
 	
 	//Statistics:
 	

@@ -6,11 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import server.CarType;
+import server.Reservation;
 import server.ReservationConstraints;
 import session.IManagerSession;
-import session.IRentalSession;
+import session.IReservationSession;
+import session.RentalAgency;
 
-public class Client extends AbstractTestBooking<IRentalSession, IManagerSession> {
+public class Client extends AbstractTestBooking<IReservationSession, IManagerSession> {
 
 	/********
 	 * MAIN *
@@ -21,6 +23,9 @@ public class Client extends AbstractTestBooking<IRentalSession, IManagerSession>
 
 	private final static String NAME1 = "Hertz";
 	private final static String NAME2 = "Dockx";
+	
+	//Todo: in client constructor: get registry.lookup("agency") en set deze
+	private RentalAgency agency;
 
 	/**
 	 * The `main` method is used to launch the client application and run the test
@@ -61,19 +66,19 @@ public class Client extends AbstractTestBooking<IRentalSession, IManagerSession>
 	}
 
 	@Override
-	protected IRentalSession getNewReservationSession(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	protected IReservationSession getNewReservationSession(String name) throws Exception {
+		return agency.createNewReservationSession(name);
 	}
 
 	@Override
 	protected IManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
-		// TODO Auto-generated method stub
+//		return agency.createNewManagerSession(carRentalName);
+		//Todo: params?
 		return null;
 	}
 
 	@Override
-	protected void checkForAvailableCarTypes(IRentalSession session, Date start, Date end) throws Exception {
+	protected void checkForAvailableCarTypes(IReservationSession session, Date start, Date end) throws Exception {
 		List<CarType> availableCarTypes = session.getAvailableCarTypes(start, end);
 
 		for (CarType car : availableCarTypes) {
@@ -83,14 +88,13 @@ public class Client extends AbstractTestBooking<IRentalSession, IManagerSession>
 	}
 
 	@Override
-	protected void addQuoteToSession(IRentalSession session, String name, Date start, Date end, String carType, String region)
+	protected void addQuoteToSession(IReservationSession session, String name, Date start, Date end, String carType, String region)
 			throws Exception {
-		session.createQuote(new ReservationConstraints(start, end, carType, region));
-		
+		session.createQuote(name, start, end, carType, region);
 	}
 
 	@Override
-	protected List confirmQuotes(IRentalSession session, String name) throws Exception {
+	protected List<Reservation> confirmQuotes(IReservationSession session, String name) throws Exception {
 		return session.confirmQuotes(name);
 	}
 

@@ -40,6 +40,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 	 * NAME *
 	 ********/
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -118,6 +119,11 @@ public class CarRentalCompany implements ICarRentalCompany {
 		}
 		return availableCars;
 	}
+	
+	@Override
+	public List<Car> getAllCars(){
+		return new ArrayList<Car>(cars);
+	}
 
 	/****************
 	 * RESERVATIONS *
@@ -158,6 +164,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 		return res;
 	}
 
+	@Override
 	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[] { name, res.toString() });
 		getCar(res.getCarId()).removeReservation(res);
@@ -185,7 +192,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 	 * Exercise 3
 	 */
 	@Override
-	public List<Reservation> getReservationsByRenter(String clientName) throws ReservationException, RemoteException {
+	public List<Reservation> getReservationsByRenter(String clientName) throws RemoteException {
 		List<Reservation> result = new ArrayList<Reservation>();
 
 		for (Car car : this.cars) {
@@ -215,5 +222,6 @@ public class CarRentalCompany implements ICarRentalCompany {
 
 		return result;
 	}
+
 
 }

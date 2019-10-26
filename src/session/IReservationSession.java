@@ -11,8 +11,9 @@ import server.Reservation;
 import server.ReservationConstraints;
 import server.ReservationException;
 
-public interface IRentalSession extends Remote {
-	Quote createQuote(ReservationConstraints constraints) throws RemoteException;
+public interface IReservationSession extends Remote {
+	void createQuote(String name, Date start, Date end, String carType, String region)
+			throws RemoteException, ReservationException;
 
 	List<Quote> getCurrentQuotes() throws RemoteException;
 

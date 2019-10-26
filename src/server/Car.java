@@ -80,4 +80,8 @@ public class Car {
 	public int getAmountOfReservations() {
 		return this.reservations.size();
 	}
+
+	public List<Reservation> getReservations() {
+		return new ArrayList<Reservation>(reservations);
+	}
 }
