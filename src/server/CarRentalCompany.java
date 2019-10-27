@@ -2,6 +2,7 @@ package server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -119,9 +120,9 @@ public class CarRentalCompany implements ICarRentalCompany {
 		}
 		return availableCars;
 	}
-	
+
 	@Override
-	public List<Car> getAllCars(){
+	public List<Car> getAllCars() {
 		return new ArrayList<Car>(cars);
 	}
 
@@ -231,7 +232,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 		}
 		return true;
 	}
-	
+
 	public boolean quoteCanUseCar(String carTypeName, Date start, Date end) {
 		if (carTypes.containsKey(carTypeName)) {
 			return getAvailableCarTypes(start, end).contains(carTypes.get(carTypeName));
@@ -239,7 +240,37 @@ public class CarRentalCompany implements ICarRentalCompany {
 			return false;
 		}
 	}
-	
 
+	@Override
+	public CarType getMostPopularCarTypeIn(int year) throws RemoteException {
+		Map<CarType, Integer> amounts = new HashMap<>();
+
+		for (Car car : this.getAllCars()) {
+			for (Reservation res : car.getReservations()) {
+
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(res.getStartDate());
+
+				if (cal.get(Calendar.YEAR) == year) {
+					Integer oldNumberOfPurchases = amounts.get(car.getType());
+					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
+					amounts.put(car.getType(), newNumberOfPurchases);
+				}
+			}
+		}
+
+		Map.Entry<CarType, Integer> resultEntry = null;
+		for (Map.Entry<CarType, Integer> entry : amounts.entrySet()) {
+			if (resultEntry == null || entry.getValue() > resultEntry.getValue()) {
+				resultEntry = entry;
+			}
+		}
+
+		if (resultEntry == null) {
+			throw new RemoteException("No CarType found for company & name");
+		}
+
+		return resultEntry.getKey();
+	}
 
 }

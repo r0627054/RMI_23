@@ -21,25 +21,23 @@ public class ManagerSession implements IManagerSession {
 	 * Name of the user (i.e. manager) using this session
 	 */
 	private String name;
-	
+
 	/**
 	 * The name of the rental company managed by this session
 	 */
 	private String carRentalName;
-	
+
 	/**
 	 * Reference of the NamingService, given by the Agency
 	 */
 	private NamingService nameService;
 
-	
-	
 	public ManagerSession(NamingService nameService, String name, String carRentalName) {
 		this.setNameService(nameService);
 		this.setName(name);
 		this.setCarRentalName(carRentalName);
 	}
-	
+
 	public ManagerSession(NamingService nameService) {
 		setNameService(nameService);
 	}
@@ -113,36 +111,8 @@ public class ManagerSession implements IManagerSession {
 
 	@Override
 	public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws RemoteException {
-		Map<CarType, Integer> amounts = new HashMap<>();
-		ICarRentalCompany company = nameService.getCompany(carRentalCompanyName);
-
-		for (Car car : company.getAllCars()) {
-			for (Reservation res : car.getReservations()) {
-
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(res.getStartDate());
-
-				if (cal.get(Calendar.YEAR) == year) {
-					Integer oldNumberOfPurchases = amounts.get(car.getType());
-					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
-					amounts.put(car.getType(), newNumberOfPurchases);
-				}
-			}
-		}
-
-		Map.Entry<CarType, Integer> resultEntry = null;
-
-		for (Map.Entry<CarType, Integer> entry : amounts.entrySet()) {
-			if (resultEntry == null || entry.getValue() > resultEntry.getValue()) {
-				resultEntry = entry;
-			}
-		}
-
-		if (resultEntry == null) {
-			throw new RemoteException("No CarType found for company & name");
-		}
-
-		return resultEntry.getKey();
+		ICarRentalCompany company = getNameService().getCompany(carRentalCompanyName);
+		return company.getMostPopularCarTypeIn(year);
 	}
 
 	// Getters & setters
@@ -169,5 +139,5 @@ public class ManagerSession implements IManagerSession {
 	private void setCarRentalName(String carRentalName) {
 		this.carRentalName = carRentalName;
 	}
-	
+
 }
