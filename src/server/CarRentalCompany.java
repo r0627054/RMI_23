@@ -226,11 +226,20 @@ public class CarRentalCompany implements ICarRentalCompany {
 	@Override
 	public boolean canCreateQuote(ReservationConstraints constraints, String client) throws RemoteException {
 		if (!operatesInRegion(constraints.getRegion())
-				|| !isAvailable(constraints.getCarType(), constraints.getStartDate(), constraints.getEndDate())) {
+				|| !quoteCanUseCar(constraints.getCarType(), constraints.getStartDate(), constraints.getEndDate())) {
 			return false;
 		}
 		return true;
 	}
+	
+	public boolean quoteCanUseCar(String carTypeName, Date start, Date end) {
+		if (carTypes.containsKey(carTypeName)) {
+			return getAvailableCarTypes(start, end).contains(carTypes.get(carTypeName));
+		} else {
+			return false;
+		}
+	}
+	
 
 
 }
