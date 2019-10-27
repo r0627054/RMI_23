@@ -80,7 +80,7 @@ public class ReservationSession implements IReservationSession {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
 		
-		//removing dublicates
+		//removing duplicates
 		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
 		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
 
