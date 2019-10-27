@@ -50,8 +50,10 @@ public class ReservationSession implements IReservationSession {
 	public Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
 		for (String comp : this.getNameService().getAllCompanies()) {
-			if(this.getNameService().getCompany(comp).canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
-				Quote q = this.getNameService().getCompany(comp).createQuote(new ReservationConstraints(start, end, carType, region), name);
+			if (this.getNameService().getCompany(comp)
+					.canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
+				Quote q = this.getNameService().getCompany(comp)
+						.createQuote(new ReservationConstraints(start, end, carType, region), name);
 				this.addQuote(q);
 				return q;
 			}
@@ -76,7 +78,7 @@ public class ReservationSession implements IReservationSession {
 				}
 			}
 		} catch (ReservationException | RemoteException e) {
-			System.out.println("Error with confirming quotes! All quotes will be rolled back.");
+			System.out.println("Error with confirming quotes! All quotes will be rolled back. NAME= " + name);
 			for (Reservation r : result) {
 				nameService.getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
@@ -121,7 +123,7 @@ public class ReservationSession implements IReservationSession {
 
 		return result;
 	}
-	
+
 	public void addQuote(Quote quote) {
 		this.getQuotes().add(quote);
 	}

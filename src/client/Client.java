@@ -36,11 +36,11 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
 
 		// creates client with the trips script file
-		Client client = new Client("trips",  false);
-		
+		Client client = new Client("trips", false);
+
 		// ---------------------------------------
 		System.out.println("CLIENT IS CONNECTED");
-		
+
 		client.run();
 	}
 
@@ -57,10 +57,10 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 				reg = LocateRegistry.getRegistry("127.0.0.1", 10481);
 			} else {
 				reg = LocateRegistry.getRegistry();
-			
+
 			}
 			this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,15 +91,15 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	}
 
 	@Override
-	protected void addQuoteToSession(IReservationSession session, String name, Date start, Date end, String carType, String region)
-			throws Exception {
+	protected void addQuoteToSession(IReservationSession session, String name, Date start, Date end, String carType,
+			String region) throws Exception {
 		System.out.println("CLIENT creates quote and add to session.");
 		session.createQuote(name, start, end, carType, region);
 	}
 
 	@Override
 	protected List<Reservation> confirmQuotes(IReservationSession session, String name) throws Exception {
-		System.out.println("CLIENT confirms all the quotes");
+		System.out.println("CLIENT confirms all the quotes, NAME = " + name);
 		return session.confirmQuotes(name);
 	}
 
@@ -110,7 +110,8 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	}
 
 	@Override
-	protected int getNumberOfReservationsForCarType(IManagerSession ms, String carRentalName, String carType) throws Exception {
+	protected int getNumberOfReservationsForCarType(IManagerSession ms, String carRentalName, String carType)
+			throws Exception {
 		System.out.println("CLIENT requests number of reservations by cartype");
 		return ms.getNumberOfReservationsByCarType(carType, carRentalName);
 	}
@@ -121,7 +122,6 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return ms.getBestCustomers();
 	}
 
-	
 	@Override
 	protected String getCheapestCarType(IReservationSession session, Date start, Date end, String region)
 			throws Exception {
@@ -136,20 +136,16 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return ms.getMostPopularCarTypeIn(carRentalCompanyName, year);
 	}
 
-	//Getters & Setters
+	// Getters & Setters
 	public IRentalAgency getAgency() {
 		return agency;
 	}
 
 	public void setAgency(IRentalAgency agency) throws ClientException {
-		if(agency == null) {
+		if (agency == null) {
 			throw new ClientException("The agency cannot be null.");
 		}
 		this.agency = agency;
 	}
-
-	
-	
-
 
 }
