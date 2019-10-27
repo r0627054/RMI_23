@@ -37,6 +37,7 @@ public class RentalServer {
 		
 		Registry registry;
 		
+		//TODO get Agency
 		if(localOrRemote == 1) {
 			registry = LocateRegistry.getRegistry(10481);
 		}else {

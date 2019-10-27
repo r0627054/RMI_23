@@ -77,11 +77,11 @@ public class ReservationSession implements IReservationSession {
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		List<CarType> result = new ArrayList<CarType>();
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
 		
-		//removing dublicates
+		//removing duplicates
 		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
 		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
 
@@ -93,7 +93,7 @@ public class ReservationSession implements IReservationSession {
 		CarType result = null;
 		double currentCheapestPrice = Double.MAX_VALUE;
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
 			for (CarType carType : company.getAvailableCarTypes(start, end)) {
 
 				if (carType.getRentalPricePerDay() < currentCheapestPrice) {

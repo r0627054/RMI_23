@@ -73,7 +73,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	@Override
 	protected IManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
 //		return agency.createNewManagerSession(carRentalName);
-		//Todo: params?
+		//TODO: params?
 		return null;
 	}
 
@@ -110,8 +110,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 	@Override
 	protected Set<String> getBestClients(IManagerSession ms) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return ms.getBestCostumers();
 	}
 
 	@Override
