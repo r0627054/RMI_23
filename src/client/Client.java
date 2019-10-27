@@ -41,7 +41,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		// ---------------------------------------
 		System.out.println("CLIENT IS CONNECTED");
 		
-		//client.run();
+		client.run();
 	}
 
 	/***************
