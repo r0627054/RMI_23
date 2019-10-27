@@ -253,7 +253,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 
 				if (cal.get(Calendar.YEAR) == year) {
 					Integer oldNumberOfPurchases = amounts.get(car.getType());
-					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases;
+					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : ++oldNumberOfPurchases;
 					amounts.put(car.getType(), newNumberOfPurchases);
 				}
 			}
