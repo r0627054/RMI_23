@@ -2,6 +2,8 @@ package nameserver;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import server.ICarRentalCompany;
 /**
@@ -14,18 +16,18 @@ import server.ICarRentalCompany;
 public class NamingService {
 
 	/**
-	 * ArrayList containing all the car rental companies.
+	 * HashMap containing all the names and their car rental companies.
 	 */
-	private static ArrayList<ICarRentalCompany> companies = new ArrayList<ICarRentalCompany>();
+	private static Map<String, ICarRentalCompany> companies = new HashMap<String, ICarRentalCompany>();
 
 	
 	/**
 	 * Returns a copy of the list of car rental companies
 	 * @return a copy of the list of car rental companies
 	 */
-	public static ArrayList<ICarRentalCompany> getCarRentalCompanies() {
+	public static HashMap<String, ICarRentalCompany> getCarRentalCompanies() {
 		// Return a copy to avoid having users changing the array without using functions
-		return new ArrayList<ICarRentalCompany>(companies);
+		return new HashMap<String, ICarRentalCompany>(companies);
 	}
 
 	/**
@@ -35,12 +37,7 @@ public class NamingService {
 	 * @throws RemoteException If there is no car rental company with the given name
 	 */
 	public static ICarRentalCompany getCompany(String name) throws RemoteException {
-		for (ICarRentalCompany c : getCarRentalCompanies()) {
-			if (c.getName().equals(name)) {
-				return c;
-			}
-		}
-		throw new RemoteException("No company can be found with the given name!");
+		return getCarRentalCompanies().get(name);
 	}
 
 	/**
@@ -50,10 +47,10 @@ public class NamingService {
 	 */
 	public static void registerCompany(ICarRentalCompany company) throws RemoteException {
 		if(company == null) {
-			throw new RemoteException("Cannot register a company which equals null. ");
+			throw new RemoteException("Cannot register a company which equals null.");
 		}
 		System.out.println("Company (" + company.getName() + ") is added to nameserver!");
-		companies.add(company);
+		companies.put(company.getName(), company);
 	}
 
 	/**
@@ -66,7 +63,7 @@ public class NamingService {
 			throw new RemoteException("Cannot unregister a company which equals null. ");
 		}
 		System.out.println("Company (" + company + ") is removed from nameserver!");
-		companies.remove(company);
+		companies.remove(company.getName());
 	}
 
 }

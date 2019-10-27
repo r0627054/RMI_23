@@ -45,7 +45,7 @@ public class ManagerSession implements IManagerSession {
 	public int getNumberOfReservations(String clientName) throws RemoteException {
 		int result = 0;
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
 			result += company.getReservationsByRenter(clientName).size();
 		}
 
@@ -58,7 +58,7 @@ public class ManagerSession implements IManagerSession {
 		Map<String, Integer> customers = new HashMap<>();
 
 		// Get all values of amount of purchases for each customer
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
 			for (Car car : company.getAllCars()) {
 				for (Reservation res : car.getReservations()) {
 
