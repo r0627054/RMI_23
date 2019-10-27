@@ -15,25 +15,26 @@ import server.ReservationConstraints;
 import server.ReservationException;
 
 /**
- * The implementation of the IReservationSession (Remote interface).
- * A reservetion session contains the quotes of the client and the name of the client.
- * It makes an implementation of all the methods specified in the Remote interface.
+ * The implementation of the IReservationSession (Remote interface). A
+ * reservetion session contains the quotes of the client and the name of the
+ * client. It makes an implementation of all the methods specified in the Remote
+ * interface.
  * 
  * @author Dries Janse, Steven Ghekiere
  *
  */
 public class ReservationSession implements IReservationSession {
-	
+
 	/**
 	 * The (String) name of the client.
 	 */
 	private String clientName;
-	
+
 	/**
 	 * The list of quotes of the client.
 	 */
 	private List<Quote> quotes;
-	
+
 	/**
 	 * Reference to the naming service, given by the Agency
 	 */
@@ -48,7 +49,7 @@ public class ReservationSession implements IReservationSession {
 	@Override
 	public void createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
-		NamingService.getCompany(name).createQuote(new ReservationConstraints(start, end, carType, region),
+		nameService.getCompany(name).createQuote(new ReservationConstraints(start, end, carType, region),
 				getClientName());
 	}
 
@@ -65,14 +66,14 @@ public class ReservationSession implements IReservationSession {
 			for (Quote q : getQuotes()) {
 				if (q.getCarRenter().equals(name)) {
 
-					ICarRentalCompany companyOfQuote = NamingService.getCompany(q.getRentalCompany());
+					ICarRentalCompany companyOfQuote = nameService.getCompany(q.getRentalCompany());
 					result.add(companyOfQuote.confirmQuote(q));
 				}
 			}
 		} catch (ReservationException | RemoteException e) {
 			System.out.println("Error with confirming quotes! All quotes will be rolled back.");
 			for (Reservation r : result) {
-				NamingService.getCompany(r.getRentalCompany()).cancelReservation(r);
+				nameService.getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
 		}
 
@@ -83,11 +84,11 @@ public class ReservationSession implements IReservationSession {
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		List<CarType> result = new ArrayList<CarType>();
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
-		
-		//removing duplicates
+
+		// removing duplicates
 		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
 		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
 
@@ -99,7 +100,7 @@ public class ReservationSession implements IReservationSession {
 		CarType result = null;
 		double currentCheapestPrice = Double.MAX_VALUE;
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
 			for (CarType carType : company.getAvailableCarTypes(start, end)) {
 
 				if (carType.getRentalPricePerDay() < currentCheapestPrice) {
@@ -142,6 +143,4 @@ public class ReservationSession implements IReservationSession {
 		this.nameService = nameService;
 	}
 
-	
-	
 }
