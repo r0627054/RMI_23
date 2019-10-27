@@ -21,7 +21,7 @@ public interface IReservationSession extends Remote {
 	
 	/**
 	 * Creates a new quote with all the given information.
-	 * @param name The name of the car renter
+	 * @param name The name of car rental company
 	 * @param start The start date
 	 * @param end  The end date
 	 * @param carType The type of the car

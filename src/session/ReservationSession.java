@@ -3,6 +3,7 @@ package session;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import nameserver.NamingService;
@@ -13,9 +14,23 @@ import server.Reservation;
 import server.ReservationConstraints;
 import server.ReservationException;
 
+/**
+ * The implementation of the IReservationSession (Remote interface).
+ * A reservetion session contains the quotes of the client and the name of the client.
+ * It makes an implementation of all the methods specified in the Remote interface.
+ * @author Dries Janse, Steven Ghekiere
+ *
+ */
 public class ReservationSession implements IReservationSession {
-
+	
+	/**
+	 * The (String) name of the client.
+	 */
 	private String clientName;
+	
+	/**
+	 * The list of quotes of the client.
+	 */
 	private List<Quote> quotes;
 
 	public ReservationSession(String clientName) {
@@ -64,8 +79,12 @@ public class ReservationSession implements IReservationSession {
 		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
+		
+		//removing dublicates
+		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
+		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
 
-		return result;
+		return resultWithoutDuplicates;
 	}
 
 	@Override
