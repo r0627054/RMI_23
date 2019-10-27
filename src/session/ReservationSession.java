@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import nameserver.NameServer;
+import nameserver.NamingService;
 import server.CarType;
 import server.ICarRentalCompany;
 import server.Quote;
@@ -26,7 +26,7 @@ public class ReservationSession implements IReservationSession {
 	@Override
 	public void createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
-		NameServer.getCompany(name).createQuote(new ReservationConstraints(start, end, carType, region),
+		NamingService.getCompany(name).createQuote(new ReservationConstraints(start, end, carType, region),
 				getClientName());
 	}
 
@@ -43,14 +43,14 @@ public class ReservationSession implements IReservationSession {
 			for (Quote q : getQuotes()) {
 				if (q.getCarRenter().equals(name)) {
 
-					ICarRentalCompany companyOfQuote = NameServer.getCompany(q.getRentalCompany());
+					ICarRentalCompany companyOfQuote = NamingService.getCompany(q.getRentalCompany());
 					result.add(companyOfQuote.confirmQuote(q));
 				}
 			}
 		} catch (ReservationException | RemoteException e) {
 			System.out.println("Error with confirming quotes! All quotes will be rolled back.");
 			for (Reservation r : result) {
-				NameServer.getCompany(r.getRentalCompany()).cancelReservation(r);
+				NamingService.getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
 		}
 
@@ -61,7 +61,7 @@ public class ReservationSession implements IReservationSession {
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		List<CarType> result = new ArrayList<CarType>();
 
-		for (ICarRentalCompany company : NameServer.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
 
@@ -73,7 +73,7 @@ public class ReservationSession implements IReservationSession {
 		CarType result = null;
 		double currentCheapestPrice = Double.MAX_VALUE;
 
-		for (ICarRentalCompany company : NameServer.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
 			for (CarType carType : company.getAvailableCarTypes(start, end)) {
 
 				if (carType.getRentalPricePerDay() < currentCheapestPrice) {

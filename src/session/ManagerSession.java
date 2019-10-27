@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import nameserver.NameServer;
+import nameserver.NamingService;
 import server.Car;
 import server.ICarRentalCompany;
 import server.Reservation;
@@ -23,18 +23,18 @@ public class ManagerSession implements IManagerSession {
 
 	@Override
 	public void registerCompany(ICarRentalCompany company) throws RemoteException {
-		NameServer.registerCompany(company);
+		NamingService.registerCompany(company);
 	}
 
 	@Override
 	public void unregisterCompany(ICarRentalCompany company) throws RemoteException {
-		NameServer.unregisterCompany(company);
+		NamingService.unregisterCompany(company);
 	}
 
 	@Override
 	public int getNumberOfReservations(String type, String carRentalName) throws RemoteException {
 		try {
-			return NameServer.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
+			return NamingService.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
 		} catch (ReservationException e) {
 			e.printStackTrace();
 			return -1;
@@ -45,7 +45,7 @@ public class ManagerSession implements IManagerSession {
 	public int getNumberOfReservations(String clientName) throws RemoteException {
 		int result = 0;
 
-		for (ICarRentalCompany company : NameServer.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
 			result += company.getReservationsByRenter(clientName).size();
 		}
 
@@ -58,7 +58,7 @@ public class ManagerSession implements IManagerSession {
 		Map<String, Integer> customers = new HashMap<>();
 
 		// Get all values of amount of purchases for each customer
-		for (ICarRentalCompany company : NameServer.getCarRentalCompanies()) {
+		for (ICarRentalCompany company : NamingService.getCarRentalCompanies()) {
 			for (Car car : company.getAllCars()) {
 				for (Reservation res : car.getReservations()) {
 
