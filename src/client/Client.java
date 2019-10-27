@@ -4,6 +4,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import server.CarType;
 import server.Reservation;
@@ -12,7 +13,7 @@ import session.IManagerSession;
 import session.IReservationSession;
 import session.RentalAgency;
 
-public class Client extends AbstractTestBooking<IReservationSession, IManagerSession> {
+public class Client extends AbstractTestManagement<IReservationSession, IManagerSession> {
 
 	/********
 	 * MAIN *
@@ -106,6 +107,26 @@ public class Client extends AbstractTestBooking<IReservationSession, IManagerSes
 	@Override
 	protected int getNumberOfReservationsForCarType(IManagerSession ms, String carRentalName, String carType) throws Exception {
 		return ms.getNumberOfReservations(carType, carRentalName);
+	}
+
+	@Override
+	protected Set<String> getBestClients(IManagerSession ms) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String getCheapestCarType(IReservationSession session, Date start, Date end, String region)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected CarType getMostPopularCarTypeIn(IManagerSession ms, String carRentalCompanyName, int year)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
