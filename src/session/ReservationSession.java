@@ -51,7 +51,9 @@ public class ReservationSession implements IReservationSession {
 			throws RemoteException, ReservationException {
 		for (String comp : this.getNameService().getAllCompanies()) {
 			if(this.getNameService().getCompany(comp).canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
-				return this.getNameService().getCompany(comp).createQuote(new ReservationConstraints(start, end, carType, region), name);
+				Quote q = this.getNameService().getCompany(comp).createQuote(new ReservationConstraints(start, end, carType, region), name);
+				this.addQuote(q);
+				return q;
 			}
 		}
 		throw new RemoteException("Cannot create quote");
@@ -63,9 +65,8 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
-	public List<Reservation> confirmQuotes(String name) throws RemoteException {
+	public synchronized List<Reservation> confirmQuotes(String name) throws RemoteException {
 		List<Reservation> result = new ArrayList<Reservation>();
-
 		try {
 			for (Quote q : getQuotes()) {
 				if (q.getCarRenter().equals(name)) {
@@ -80,7 +81,6 @@ public class ReservationSession implements IReservationSession {
 				nameService.getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
 		}
-
 		return result;
 	}
 
@@ -120,6 +120,10 @@ public class ReservationSession implements IReservationSession {
 		}
 
 		return result;
+	}
+	
+	public void addQuote(Quote quote) {
+		this.getQuotes().add(quote);
 	}
 
 	// Setters & getters

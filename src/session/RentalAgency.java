@@ -30,17 +30,19 @@ public class RentalAgency implements IRentalAgency {
 		setNameService(new NamingService());
 
 		setReservationSessions(new ArrayList<IReservationSession>());
-		setManagerSession(new ManagerSession(nameService));
+		setManagerSession(new ManagerSession(this.getNameService()));
 	}
 
 	@Override
 	public IReservationSession createNewReservationSession(String name) throws RemoteException {
-		return new ReservationSession(name, nameService);
+		return new ReservationSession(name, this.getNameService());
 	}
 
 	@Override
-	public IManagerSession createNewManagerSession(String name) throws RemoteException {
-		return managerSession;
+	public IManagerSession createNewManagerSession(String name, String carRentalName) throws RemoteException {
+		ManagerSession session = new ManagerSession(this.getNameService(), name, carRentalName);
+		this.setManagerSession(session);
+		return session;
 	}
 
 	@Override

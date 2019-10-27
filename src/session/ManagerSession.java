@@ -18,10 +18,28 @@ import server.ReservationException;
 public class ManagerSession implements IManagerSession {
 
 	/**
-	 * Refernce of the NamingService, given by the Agency
+	 * Name of the user (i.e. manager) using this session
+	 */
+	private String name;
+	
+	/**
+	 * The name of the rental company managed by this session
+	 */
+	private String carRentalName;
+	
+	/**
+	 * Reference of the NamingService, given by the Agency
 	 */
 	private NamingService nameService;
 
+	
+	
+	public ManagerSession(NamingService nameService, String name, String carRentalName) {
+		this.setNameService(nameService);
+		this.setName(name);
+		this.setCarRentalName(carRentalName);
+	}
+	
 	public ManagerSession(NamingService nameService) {
 		setNameService(nameService);
 	}
@@ -58,7 +76,7 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public Set<String> getBestCostumers() throws RemoteException {
+	public Set<String> getBestCustomers() throws RemoteException {
 		// key: customer name, value: nbr of purchases
 		Map<String, Integer> customers = new HashMap<>();
 
@@ -136,4 +154,20 @@ public class ManagerSession implements IManagerSession {
 		this.nameService = nameService;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	private void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCarRentalName() {
+		return carRentalName;
+	}
+
+	private void setCarRentalName(String carRentalName) {
+		this.carRentalName = carRentalName;
+	}
+	
 }
