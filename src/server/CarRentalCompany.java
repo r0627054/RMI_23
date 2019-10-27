@@ -227,9 +227,9 @@ public class CarRentalCompany implements ICarRentalCompany {
 	public boolean canCreateQuote(ReservationConstraints constraints, String client) throws RemoteException {
 		if (!operatesInRegion(constraints.getRegion())
 				|| !isAvailable(constraints.getCarType(), constraints.getStartDate(), constraints.getEndDate())) {
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 

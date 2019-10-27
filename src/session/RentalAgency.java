@@ -1,6 +1,7 @@
 package session;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,9 @@ public class RentalAgency implements IRentalAgency {
 
 	@Override
 	public IReservationSession createNewReservationSession(String name) throws RemoteException {
-		return new ReservationSession(name, this.getNameService());
+		ReservationSession session = new ReservationSession(name, this.getNameService());
+		this.addReservationSession(session);
+		return (IReservationSession) UnicastRemoteObject.exportObject(session, 0);
 	}
 
 	@Override
@@ -74,6 +77,10 @@ public class RentalAgency implements IRentalAgency {
 
 	private void setNameService(NamingService nameService) {
 		this.nameService = nameService;
+	}
+	
+	public void addReservationSession(IReservationSession session) {
+		reservationSessions.add(session);
 	}
 
 	

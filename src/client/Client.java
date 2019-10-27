@@ -70,7 +70,8 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	@Override
 	protected IReservationSession getNewReservationSession(String name) throws Exception {
 		System.out.println("New Reservation session is created");
-		return this.getAgency().createNewReservationSession(name);
+		IReservationSession session = this.getAgency().createNewReservationSession(name);
+		return session;
 	}
 
 	@Override
@@ -81,6 +82,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 	@Override
 	protected void checkForAvailableCarTypes(IReservationSession session, Date start, Date end) throws Exception {
+		System.out.println("CLIENT: Check for available car types");
 		List<CarType> availableCarTypes = session.getAvailableCarTypes(start, end);
 		for (CarType car : availableCarTypes) {
 			System.out.println(car);
