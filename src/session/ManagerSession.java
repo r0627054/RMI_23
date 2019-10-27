@@ -79,15 +79,23 @@ public class ManagerSession implements IManagerSession {
 		Map<String, Integer> customers = new HashMap<>();
 
 		// Get all values of amount of purchases for each customer
-		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
-			for (Car car : company.getAllCars()) {
-				for (Reservation res : car.getReservations()) {
+		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
+			
+			//Get best customers for each company
+			Map<String, Integer> customersTemp = company.getBestCustomer();
 
-					Integer oldNumberOfPurchases = customers.get(res.getCarRenter());
-					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
-					customers.put(res.getCarRenter(), newNumberOfPurchases);
+			//Check for each entry if it existed in customers map.
+			//If not existed, put new key/value pair.
+			//If exitsted, put same key with added values.
+			for (Map.Entry<String, Integer> entry : customersTemp.entrySet()) {
+				
+				if (customers.get(entry.getKey()) == null) {
+					customers.put(entry.getKey(), entry.getValue());
+				} else {
+					customers.put(entry.getKey(), entry.getValue() + customers.get(entry.getKey()));
 				}
 			}
+
 		}
 
 		// Get maximum amount of purchases

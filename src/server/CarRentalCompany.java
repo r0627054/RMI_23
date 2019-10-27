@@ -253,7 +253,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 
 				if (cal.get(Calendar.YEAR) == year) {
 					Integer oldNumberOfPurchases = amounts.get(car.getType());
-					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
+					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases;
 					amounts.put(car.getType(), newNumberOfPurchases);
 				}
 			}
@@ -271,6 +271,22 @@ public class CarRentalCompany implements ICarRentalCompany {
 		}
 
 		return resultEntry.getKey();
+	}
+
+	@Override
+	public Map<String, Integer> getBestCustomer() throws RemoteException {
+		Map<String, Integer> customers = new HashMap<String, Integer>();
+
+		for (Car car : this.getAllCars()) {
+			for (Reservation res : car.getReservations()) {
+
+				Integer oldNumberOfPurchases = customers.get(res.getCarRenter());
+				Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
+				customers.put(res.getCarRenter(), newNumberOfPurchases);
+			}
+		}
+
+		return customers;
 	}
 
 }
