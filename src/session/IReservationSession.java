@@ -29,7 +29,7 @@ public interface IReservationSession extends Remote {
 	 * @throws RemoteException  if things go wrong.
 	 * @throws ReservationException  if things go wrong.
 	 */
-	void createQuote(String name, Date start, Date end, String carType, String region)
+	Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException;
 
 	/**

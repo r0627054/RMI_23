@@ -1,5 +1,6 @@
 package nameserver;
 
+import java.awt.List;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +70,10 @@ public class NamingService {
 		}
 		System.out.println("Company (" + company + ") is removed from nameserver!");
 		companies.remove(company.getName());
+	}
+	
+	public ArrayList<String> getAllCompanies(){
+		return new ArrayList<>(companies.keySet());
 	}
 
 }

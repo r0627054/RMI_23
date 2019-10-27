@@ -47,10 +47,14 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
-	public void createQuote(String name, Date start, Date end, String carType, String region)
+	public Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
-		nameService.getCompany(name).createQuote(new ReservationConstraints(start, end, carType, region),
-				getClientName());
+		for (String comp : this.getNameService().getAllCompanies()) {
+			if(this.getNameService().getCompany(comp).canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
+				return this.getNameService().getCompany(comp).createQuote(new ReservationConstraints(start, end, carType, region), name);
+			}
+		}
+		throw new RemoteException("Cannot create quote");
 	}
 
 	@Override

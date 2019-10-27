@@ -11,6 +11,8 @@ public interface ICarRentalCompany extends Remote {
 	Set<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException;
 
 	Quote createQuote(ReservationConstraints constraints, String client) throws ReservationException, RemoteException;
+	
+	boolean canCreateQuote(ReservationConstraints constraints, String client) throws RemoteException;
 
 	Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException;
 
