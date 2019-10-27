@@ -8,7 +8,6 @@ import java.util.Set;
 
 import server.CarType;
 import server.Reservation;
-import server.ReservationConstraints;
 import session.IManagerSession;
 import session.IReservationSession;
 import session.RentalAgency;
@@ -22,10 +21,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	private final static int LOCAL = 0;
 	private final static int REMOTE = 1;
 
-	private final static String NAME1 = "Hertz";
-	private final static String NAME2 = "Dockx";
-	
-	//Todo: in client constructor: get registry.lookup("agency") en set deze
+	//TODO : in client constructor: get registry.lookup("agency") en set deze
 	private RentalAgency agency;
 
 	/**
@@ -39,8 +35,8 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		// indicates whether the application is run on the remote setup or not.
 		int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
 
-		// An example reservation scenario on car rental company 'Hertz' would be...
-		Client client = new Client("simpleTrips", NAME1, localOrRemote == 1);
+		// creates client with the trips script file
+		Client client = new Client("trips",  localOrRemote == 1);
 		client.run();
 	}
 
@@ -48,10 +44,9 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	 * CONSTRUCTOR *
 	 ***************/
 
-	public Client(String scriptFile, String carRentalCompanyName, boolean remote) {
+	public Client(String scriptFile, boolean remote) {
 		super(scriptFile);
 		System.out.println("Client scriptfile loaded");
-
 		try {
 			Registry reg;
 			if (remote) {
@@ -59,6 +54,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 			} else {
 				reg = LocateRegistry.getRegistry();
 			}
+			//TODO Hier willen we RentalAgency opvragen/aanmaken
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,6 +125,19 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return null;
 	}
 
+	public RentalAgency getAgency() {
+		return agency;
+	}
+
+	public void setAgency(RentalAgency agency) throws ClientException {
+		if(agency == null) {
+			throw new ClientException("The agency cannot be null.");
+		}
+		this.agency = agency;
+	}
+
+	
+	
 
 
 }
