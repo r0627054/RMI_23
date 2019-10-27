@@ -5,55 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
-import java.rmi.AlreadyBoundException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class RentalServer {
 
-	private final static int LOCAL = 0;
-	private final static int REMOTE = 1;
-
-	private final static String NAME = "Hertz";
-
-	public static void main(String[] args) throws ReservationException, NumberFormatException, IOException {
-		//System.setSecurityManager(null);
-
-		// The first argument passed to the `main` method (if present)
-		// indicates whether the application is run on the remote setup or not.
-		 int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
-
-		CrcData data = loadData("hertz.csv");
-		CarRentalCompany company = new CarRentalCompany(data.name, data.regions, data.cars);
-		System.out.println("Data loaded...");
-
-		ICarRentalCompany iCompany = (ICarRentalCompany) UnicastRemoteObject.exportObject(company, 10482);
-		System.out.println("Parsed into 'Remote' superclass...");
-		
-		Registry registry;
-		
-		//TODO get Agency
-		if(localOrRemote == 1) {
-			registry = LocateRegistry.getRegistry(10481);
-		}else {
-			registry = LocateRegistry.getRegistry();
-		}
-		
-		
-		try {
-			registry.rebind(NAME, iCompany);
-			System.out.println(NAME + " running on rmi registry.\nDone!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
+public abstract class RentalApplication {
 	public static CrcData loadData(String datafile) throws ReservationException, NumberFormatException, IOException {
 
 		CrcData out = new CrcData();
