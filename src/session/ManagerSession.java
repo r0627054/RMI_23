@@ -14,27 +14,30 @@ import server.Reservation;
 import server.ReservationException;
 
 public class ManagerSession implements IManagerSession {
+	
+	/**
+	 * Refernce of the NamingService, given by the Agency
+	 */
+	private NamingService nameService;
 
-	private String name;
-
-	public ManagerSession(String name) {
-		setName(name);
+	public ManagerSession(NamingService nameService) {
+		setNameService(nameService);
 	}
 
 	@Override
 	public void registerCompany(ICarRentalCompany company) throws RemoteException {
-		NamingService.registerCompany(company);
+		nameService.registerCompany(company);
 	}
 
 	@Override
 	public void unregisterCompany(ICarRentalCompany company) throws RemoteException {
-		NamingService.unregisterCompany(company);
+		nameService.unregisterCompany(company);
 	}
 
 	@Override
 	public int getNumberOfReservations(String type, String carRentalName) throws RemoteException {
 		try {
-			return NamingService.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
+			return nameService.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
 		} catch (ReservationException e) {
 			e.printStackTrace();
 			return -1;
@@ -45,7 +48,7 @@ public class ManagerSession implements IManagerSession {
 	public int getNumberOfReservations(String clientName) throws RemoteException {
 		int result = 0;
 
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
 			result += company.getReservationsByRenter(clientName).size();
 		}
 
@@ -58,7 +61,7 @@ public class ManagerSession implements IManagerSession {
 		Map<String, Integer> customers = new HashMap<>();
 
 		// Get all values of amount of purchases for each customer
-		for (ICarRentalCompany company : NamingService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
 			for (Car car : company.getAllCars()) {
 				for (Reservation res : car.getReservations()) {
 
@@ -89,12 +92,14 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	// Getters & setters
-	public String getName() {
-		return name;
+	public NamingService getNameService() {
+		return nameService;
 	}
 
-	private void setName(String name) {
-		this.name = name;
+	private void setNameService(NamingService nameService) {
+		this.nameService = nameService;
 	}
+	
+	
 
 }

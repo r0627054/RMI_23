@@ -18,10 +18,10 @@ public interface ICarRentalCompany extends Remote {
 
 	int getNumberOfReservationsForCarType(String carType) throws ReservationException, RemoteException;
 
-	String getName()  throws RemoteException;;
+	String getName() throws RemoteException;
 
-	void cancelReservation(Reservation reservation)  throws RemoteException;;
-	
-	List<Car> getAllCars()  throws RemoteException;
+	void cancelReservation(Reservation reservation) throws RemoteException;
+
+	List<Car> getAllCars() throws RemoteException;
 
 }

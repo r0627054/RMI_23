@@ -36,7 +36,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
 
 		// creates client with the trips script file
-		Client client = new Client("trips",  localOrRemote == 1);
+		Client client = new Client("trips",  false);
 		
 		// ---------------------------------------
 		System.out.println("CLIENT IS CONNECTED");
@@ -60,6 +60,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 			
 			}
 			this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

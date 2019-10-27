@@ -33,9 +33,15 @@ public class ReservationSession implements IReservationSession {
 	 * The list of quotes of the client.
 	 */
 	private List<Quote> quotes;
+	
+	/**
+	 * Reference to the naming service, given by the Agency
+	 */
+	private NamingService nameService;
 
-	public ReservationSession(String clientName) {
+	public ReservationSession(String clientName, NamingService nameService) {
 		setClientName(clientName);
+		setNameService(nameService);
 		setQuotes(new ArrayList<Quote>());
 	}
 
@@ -116,7 +122,7 @@ public class ReservationSession implements IReservationSession {
 		return clientName;
 	}
 
-	public void setClientName(String clientName) {
+	private void setClientName(String clientName) {
 		this.clientName = clientName;
 	}
 
@@ -124,8 +130,18 @@ public class ReservationSession implements IReservationSession {
 		return quotes;
 	}
 
-	public void setQuotes(List<Quote> quotes) {
+	private void setQuotes(List<Quote> quotes) {
 		this.quotes = quotes;
 	}
 
+	public NamingService getNameService() {
+		return nameService;
+	}
+
+	private void setNameService(NamingService nameService) {
+		this.nameService = nameService;
+	}
+
+	
+	
 }
