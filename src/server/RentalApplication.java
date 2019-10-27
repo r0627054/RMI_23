@@ -10,10 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
 public abstract class RentalApplication {
+	
 	public static CrcData loadData(String datafile) throws ReservationException, NumberFormatException, IOException {
-
 		CrcData out = new CrcData();
 		int nextuid = 0;
 
