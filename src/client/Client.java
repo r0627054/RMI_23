@@ -9,6 +9,7 @@ import java.util.Set;
 import server.CarType;
 import server.Reservation;
 import session.IManagerSession;
+import session.IRentalAgency;
 import session.IReservationSession;
 import session.RentalAgency;
 
@@ -21,8 +22,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	private final static int LOCAL = 0;
 	private final static int REMOTE = 1;
 
-	//TODO : in client constructor: get registry.lookup("agency") en set deze
-	private RentalAgency agency;
+	private IRentalAgency agency;
 
 	/**
 	 * The `main` method is used to launch the client application and run the test
@@ -37,7 +37,10 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 		// creates client with the trips script file
 		Client client = new Client("trips",  localOrRemote == 1);
-		client.run();
+		
+		// ---------------------------------------
+		System.out.println("CLIENT IS CONNECTED");
+		//client.run();
 	}
 
 	/***************
@@ -53,9 +56,9 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 				reg = LocateRegistry.getRegistry("127.0.0.1", 10481);
 			} else {
 				reg = LocateRegistry.getRegistry();
+			
 			}
-			//TODO Hier willen we RentalAgency opvragen/aanmaken
-
+			this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,11 +128,11 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return null;
 	}
 
-	public RentalAgency getAgency() {
+	public IRentalAgency getAgency() {
 		return agency;
 	}
 
-	public void setAgency(RentalAgency agency) throws ClientException {
+	public void setAgency(IRentalAgency agency) throws ClientException {
 		if(agency == null) {
 			throw new ClientException("The agency cannot be null.");
 		}

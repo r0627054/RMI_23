@@ -11,8 +11,7 @@ public class RentalAgency implements IRentalAgency {
 	//Singleton managerSession?
 	private ManagerSession managerSession = new ManagerSession("manager");
 	
-	
-	
+
 	@Override
 	public IReservationSession createNewReservationSession(String name) throws RemoteException {
 		// TODO Auto-generated method stub

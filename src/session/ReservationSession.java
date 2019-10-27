@@ -18,6 +18,7 @@ import server.ReservationException;
  * The implementation of the IReservationSession (Remote interface).
  * A reservetion session contains the quotes of the client and the name of the client.
  * It makes an implementation of all the methods specified in the Remote interface.
+ * 
  * @author Dries Janse, Steven Ghekiere
  *
  */
