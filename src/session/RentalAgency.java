@@ -45,7 +45,7 @@ public class RentalAgency implements IRentalAgency {
 	public IManagerSession createNewManagerSession(String name, String carRentalName) throws RemoteException {
 		ManagerSession session = new ManagerSession(this.getNameService(), name, carRentalName);
 		this.setManagerSession(session);
-		return session;
+		return ( IManagerSession ) UnicastRemoteObject.exportObject(session,0);
 	}
 
 	@Override
