@@ -1,6 +1,7 @@
 package session;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,12 +10,13 @@ import java.util.Set;
 
 import nameserver.NamingService;
 import server.Car;
+import server.CarType;
 import server.ICarRentalCompany;
 import server.Reservation;
 import server.ReservationException;
 
 public class ManagerSession implements IManagerSession {
-	
+
 	/**
 	 * Refernce of the NamingService, given by the Agency
 	 */
@@ -35,7 +37,7 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public int getNumberOfReservations(String type, String carRentalName) throws RemoteException {
+	public int getNumberOfReservationsByCarType(String type, String carRentalName) throws RemoteException {
 		try {
 			return nameService.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
 		} catch (ReservationException e) {
@@ -87,8 +89,42 @@ public class ManagerSession implements IManagerSession {
 				result.add(entry.getKey());
 			}
 		}
-		
+
 		return result;
+	}
+
+	@Override
+	public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws RemoteException {
+		Map<CarType, Integer> amounts = new HashMap<>();
+		ICarRentalCompany company = nameService.getCompany(carRentalCompanyName);
+
+		for (Car car : company.getAllCars()) {
+			for (Reservation res : car.getReservations()) {
+
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(res.getStartDate());
+
+				if (cal.get(Calendar.YEAR) == year) {
+					Integer oldNumberOfPurchases = amounts.get(car.getType());
+					Integer newNumberOfPurchases = oldNumberOfPurchases == null ? 1 : oldNumberOfPurchases++;
+					amounts.put(car.getType(), newNumberOfPurchases);
+				}
+			}
+		}
+
+		Map.Entry<CarType, Integer> resultEntry = null;
+
+		for (Map.Entry<CarType, Integer> entry : amounts.entrySet()) {
+			if (resultEntry == null || entry.getValue() > resultEntry.getValue()) {
+				resultEntry = entry;
+			}
+		}
+
+		if (resultEntry == null) {
+			throw new RemoteException("No CarType found for company & name");
+		}
+
+		return resultEntry.getKey();
 	}
 
 	// Getters & setters
@@ -99,7 +135,5 @@ public class ManagerSession implements IManagerSession {
 	private void setNameService(NamingService nameService) {
 		this.nameService = nameService;
 	}
-	
-	
 
 }

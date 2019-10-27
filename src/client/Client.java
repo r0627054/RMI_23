@@ -107,7 +107,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 	@Override
 	protected int getNumberOfReservationsForCarType(IManagerSession ms, String carRentalName, String carType) throws Exception {
-		return ms.getNumberOfReservations(carType, carRentalName);
+		return ms.getNumberOfReservationsByCarType(carType, carRentalName);
 	}
 
 	@Override
@@ -118,17 +118,16 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	@Override
 	protected String getCheapestCarType(IReservationSession session, Date start, Date end, String region)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getCheapestCarType(start, end, region).getName();
 	}
 
 	@Override
 	protected CarType getMostPopularCarTypeIn(IManagerSession ms, String carRentalCompanyName, int year)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return ms.getMostPopularCarTypeIn(carRentalCompanyName, year);
 	}
 
+	//Getters & Setters
 	public IRentalAgency getAgency() {
 		return agency;
 	}
