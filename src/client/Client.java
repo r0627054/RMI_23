@@ -36,7 +36,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		int localOrRemote = (args.length == 1 && args[0].equals("REMOTE")) ? REMOTE : LOCAL;
 
 		// creates client with the trips script file
-		Client client = new Client("trips", false);
+		Client client = new Client("trips", localOrRemote == REMOTE);
 
 		// ---------------------------------------
 		System.out.println("CLIENT IS CONNECTED WITH AGENCY\n\n");
@@ -67,6 +67,8 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 			if (reg != null) {
 				System.out.println("RMI Registry found on client!");
 				this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
+			} else {
+				throw new ClientException("No registry found!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
