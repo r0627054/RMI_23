@@ -2,14 +2,10 @@ package session;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nameserver.INamingService;
-import nameserver.NamingService;
-import server.ICarRentalCompany;
 
 public class RentalAgency implements IRentalAgency {
 
@@ -36,38 +32,51 @@ public class RentalAgency implements IRentalAgency {
 
 	@Override
 	public IReservationSession createNewReservationSession(String name) throws RemoteException {
-		ReservationSession session = new ReservationSession(name, this.getNameService());
-		this.addReservationSession(session);
-		return (IReservationSession) UnicastRemoteObject.exportObject(session, 0);
+		synchronized (reservationSessions) {
+			if (getReservationSessions().get(name) != null) {
+				return getReservationSessionByName(name);
+
+			} else {
+				ReservationSession session = new ReservationSession(name, this.getNameService());
+				this.addReservationSession(session);
+				return (IReservationSession) UnicastRemoteObject.exportObject(session, 0);
+			}
+		}
 	}
 
 	@Override
 	public IManagerSession createNewManagerSession(String name, String carRentalName) throws RemoteException {
-		ManagerSession session = new ManagerSession(this.getNameService(), name, carRentalName);
-		this.setManagerSession(session);
-		return (IManagerSession) UnicastRemoteObject.exportObject(session, 0);
+		synchronized (managerSession) {
+			ManagerSession session = new ManagerSession(this.getNameService(), name, carRentalName);
+			this.setManagerSession(session);
+			return (IManagerSession) UnicastRemoteObject.exportObject(session, 0);
+		}
 	}
 
 	@Override
 	public void closeManagerSession() throws RemoteException {
-		if (this.getManagerSession() == null)
-			throw new RemoteException("ManagerSession does not exist.");
-		this.setManagerSession(null);
-		System.out.println("ManagerSession is closed in agency");
+		synchronized (managerSession) {
+			if (this.getManagerSession() == null)
+				throw new RemoteException("ManagerSession does not exist.");
+			this.setManagerSession(null);
+			System.out.println("ManagerSession is closed in agency");
+		}
 	}
 
 	@Override
 	public void closeReservationSession(String sessionName) throws RemoteException {
-		IReservationSession session = this.getReservationSessionByName(sessionName);
+		synchronized (reservationSessions) {
+			IReservationSession session = this.getReservationSessionByName(sessionName);
 
-		if (session != null) {
-			this.removeReservationSession(session);
+			if (session != null) {
+				this.removeReservationSession(session);
 
-		} else {
-			throw new RemoteException("ReservationSession " + sessionName + " does not exist.");
+			} else {
+				throw new RemoteException("ReservationSession " + sessionName + " does not exist.");
+			}
+			System.out.println("ReservationSession " + sessionName + " is closed in agency. New amount: "
+					+ getReservationSessions().size());
 		}
-		System.out.println("ReservationSession " + sessionName + " is closed in agency. New amount: "
-				+ getReservationSessions().size());
 	}
 
 	// Getters & Setters

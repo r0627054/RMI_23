@@ -5,9 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import session.IRentalAgency;
-import session.RentalAgency;
-
 public class NamingServiceApplication {
 
 	public static void main(String[] args) throws RemoteException {

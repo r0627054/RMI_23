@@ -1,6 +1,5 @@
 package nameserver;
 
-import java.awt.List;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,11 +50,13 @@ public class NamingService implements INamingService {
 	 * @throws RemoteException Thrown when the company equals null
 	 */
 	public void registerCompany(ICarRentalCompany company) throws RemoteException {
-		if (company == null) {
-			throw new RemoteException("Cannot register a company which equals null.");
+		synchronized (companies) {
+			if (company == null) {
+				throw new RemoteException("Cannot register a company which equals null.");
+			}
+			System.out.println("Company (" + company.getName() + ") is added to nameserver!");
+			companies.put(company.getName(), company);
 		}
-		System.out.println("Company (" + company.getName() + ") is added to nameserver!");
-		companies.put(company.getName(), company);
 	}
 
 	/**
@@ -65,11 +66,13 @@ public class NamingService implements INamingService {
 	 * @throws RemoteException Thrown when the company equals null
 	 */
 	public void unregisterCompany(ICarRentalCompany company) throws RemoteException {
-		if (company == null) {
-			throw new RemoteException("Cannot unregister a company which equals null. ");
+		synchronized (companies) {
+			if (company == null) {
+				throw new RemoteException("Cannot unregister a company which equals null. ");
+			}
+			System.out.println("Company (" + company + ") is removed from nameserver!");
+			companies.remove(company.getName());
 		}
-		System.out.println("Company (" + company + ") is removed from nameserver!");
-		companies.remove(company.getName());
 	}
 
 	public ArrayList<String> getAllCompanies() throws RemoteException {

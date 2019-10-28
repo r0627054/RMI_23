@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import nameserver.INamingService;
-import nameserver.NamingService;
 import server.CarType;
 import server.ICarRentalCompany;
 import server.Quote;
@@ -74,14 +73,14 @@ public class ReservationSession implements IReservationSession {
 			for (Quote q : getQuotes()) {
 				if (q.getCarRenter().equals(name)) {
 
-					ICarRentalCompany companyOfQuote = nameService.getCompany(q.getRentalCompany());
+					ICarRentalCompany companyOfQuote = getNameService().getCompany(q.getRentalCompany());
 					result.add(companyOfQuote.confirmQuote(q));
 				}
 			}
 		} catch (ReservationException | RemoteException e) {
 			System.out.println("Error with confirming quotes! All quotes will be rolled back. NAME= " + name);
 			for (Reservation r : result) {
-				nameService.getCompany(r.getRentalCompany()).cancelReservation(r);
+				getNameService().getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
 		}
 		return result;
