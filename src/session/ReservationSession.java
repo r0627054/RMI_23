@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import nameserver.INamingService;
 import nameserver.NamingService;
 import server.CarType;
 import server.ICarRentalCompany;
@@ -38,9 +39,9 @@ public class ReservationSession implements IReservationSession {
 	/**
 	 * Reference to the naming service, given by the Agency
 	 */
-	private NamingService nameService;
+	private INamingService nameService;
 
-	public ReservationSession(String clientName, NamingService nameService) {
+	public ReservationSession(String clientName, INamingService nameService) {
 		setClientName(clientName);
 		setNameService(nameService);
 		setQuotes(new ArrayList<Quote>());
@@ -146,11 +147,11 @@ public class ReservationSession implements IReservationSession {
 		this.quotes = quotes;
 	}
 
-	public NamingService getNameService() {
+	public INamingService getNameService() {
 		return nameService;
 	}
 
-	private void setNameService(NamingService nameService) {
+	private void setNameService(INamingService nameService) {
 		this.nameService = nameService;
 	}
 

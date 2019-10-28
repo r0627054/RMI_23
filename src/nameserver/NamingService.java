@@ -16,7 +16,7 @@ import server.ICarRentalCompany;
  * @author Dries Janse, Steven Ghekiere
  *
  */
-public class NamingService {
+public class NamingService implements INamingService {
 
 	/**
 	 * HashMap containing all the names and their car rental companies.
@@ -28,7 +28,7 @@ public class NamingService {
 	 * 
 	 * @return a copy of the list of car rental companies
 	 */
-	public HashMap<String, ICarRentalCompany> getCarRentalCompanies() {
+	public HashMap<String, ICarRentalCompany> getCarRentalCompanies() throws RemoteException {
 		// Return a copy to avoid having users changing the map without using functions
 		return new HashMap<String, ICarRentalCompany>(companies);
 	}
@@ -71,8 +71,8 @@ public class NamingService {
 		System.out.println("Company (" + company + ") is removed from nameserver!");
 		companies.remove(company.getName());
 	}
-	
-	public ArrayList<String> getAllCompanies(){
+
+	public ArrayList<String> getAllCompanies() throws RemoteException {
 		return new ArrayList<>(companies.keySet());
 	}
 

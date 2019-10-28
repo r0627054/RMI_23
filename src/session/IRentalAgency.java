@@ -3,6 +3,7 @@ package session;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import nameserver.INamingService;
 import server.ICarRentalCompany;
 
 public interface IRentalAgency extends Remote {
@@ -14,4 +15,6 @@ public interface IRentalAgency extends Remote {
 	void closeManagerSession() throws RemoteException;
 	
 	void closeReservationSession(String sessionName) throws RemoteException;
+
+	void setNameService(INamingService nameService) throws RemoteException;
 }
