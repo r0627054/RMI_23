@@ -47,6 +47,24 @@ public class RentalAgency implements IRentalAgency {
 		return (IManagerSession) UnicastRemoteObject.exportObject(session, 0);
 	}
 
+	@Override
+	public void closeManagerSession() throws RemoteException {
+		if (this.getManagerSession() == null)
+			throw new RemoteException("ManagerSession does not exist.");
+		this.setManagerSession(null);
+	}
+
+	@Override
+	public void closeReservationSession(String sessionName) throws RemoteException {
+		IReservationSession session = this.getReservationSessionByName(sessionName);
+
+		if (session != null) {
+			this.removeReservationSession(session);
+		} else {
+			throw new RemoteException("ReservationSession " + sessionName + " does not exist.");
+		}
+	}
+
 	// Getters & Setters
 	public List<IReservationSession> getReservationSessions() {
 		return reservationSessions;
@@ -74,6 +92,19 @@ public class RentalAgency implements IRentalAgency {
 
 	public void addReservationSession(IReservationSession session) {
 		reservationSessions.add(session);
+	}
+
+	public void removeReservationSession(IReservationSession session) {
+		reservationSessions.remove(session);
+	}
+
+	public IReservationSession getReservationSessionByName(String name) throws RemoteException {
+		for (IReservationSession session : getReservationSessions()) {
+			if (session.getClientName().equals(name)) {
+				return session;
+			}
+		}
+		return null;
 	}
 
 }

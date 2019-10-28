@@ -66,5 +66,12 @@ public interface IReservationSession extends Remote {
 	 * @throws RemoteException if things go wrong.
 	 */
 	CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException;
+	
+	/**
+	 * Returns the name of the session
+	 * @return the name of the session
+	 * @throws RemoteException if things go wrong.
+	 */
+	String getClientName() throws RemoteException;
 
 }

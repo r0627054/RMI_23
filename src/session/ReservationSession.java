@@ -129,6 +129,7 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	// Setters & getters
+	@Override
 	public String getClientName() {
 		return clientName;
 	}
