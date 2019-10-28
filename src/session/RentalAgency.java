@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nameserver.INamingService;
 import nameserver.NamingService;
 import server.ICarRentalCompany;
 
@@ -27,9 +26,11 @@ public class RentalAgency implements IRentalAgency {
 	 * The naming service that holds the car rental companies. We give a reference
 	 * of this service to each session.
 	 */
-	private INamingService nameService;
+	private NamingService nameService;
 
 	public RentalAgency() {
+		setNameService(new NamingService());
+
 		setReservationSessions(new HashMap<String, IReservationSession>());
 		setManagerSession(new ManagerSession(this.getNameService()));
 	}
@@ -87,17 +88,12 @@ public class RentalAgency implements IRentalAgency {
 		this.managerSession = managerSession;
 	}
 
-	public INamingService getNameService() {
+	public NamingService getNameService() {
 		return nameService;
 	}
 
-	@Override
-	public void setNameService(INamingService nameService) throws RemoteException {
-		if (nameService != null) {
-			this.nameService = nameService;
-		} else {
-			throw new RemoteException("Cannot set a null naming service");
-		}
+	private void setNameService(NamingService nameService) {
+		this.nameService = nameService;
 	}
 
 	public void addReservationSession(IReservationSession session) throws RemoteException {
