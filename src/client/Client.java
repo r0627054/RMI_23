@@ -1,5 +1,6 @@
 package client;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
@@ -12,6 +13,7 @@ import session.IManagerSession;
 import session.IRentalAgency;
 import session.IReservationSession;
 import session.RentalAgency;
+import session.ReservationSession;
 
 public class Client extends AbstractTestManagement<IReservationSession, IManagerSession> {
 
@@ -42,6 +44,9 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		System.out.println("CLIENT IS CONNECTED");
 
 		client.run();
+
+		System.out.println("CLIENT TRYING TO CLOSE ALL SESSIONS");
+		client.closeAllSessions();
 	}
 
 	/***************
@@ -60,6 +65,10 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 			}
 			this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
+
+//			IReservationSession session = client.getNewReservationSession("Driesje");
+//			session.getCheapestCarType(start, end, region)
+//			agency.closeReservationSession(session.getClientName());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,6 +143,14 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 			throws Exception {
 		System.out.println("CLIENT requests most popular car type");
 		return ms.getMostPopularCarTypeIn(carRentalCompanyName, year);
+	}
+
+	private void closeAllSessions() throws RemoteException {
+		for (String reservationSessionName : sessions.keySet()) {
+			getAgency().closeReservationSession(reservationSessionName);
+		}
+		getAgency().closeReservationSession(managerResSession.getClientName());
+		getAgency().closeManagerSession();
 	}
 
 	// Getters & Setters

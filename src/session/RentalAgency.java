@@ -3,7 +3,9 @@ package session;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nameserver.NamingService;
 import server.ICarRentalCompany;
@@ -13,7 +15,7 @@ public class RentalAgency implements IRentalAgency {
 	/**
 	 * List of client reservation sessions, one session for each 'normal' client.
 	 */
-	private List<IReservationSession> reservationSessions;
+	private Map<String, IReservationSession> reservationSessions;
 
 	/**
 	 * Single manager session, used by the manager client of the agency.
@@ -29,7 +31,7 @@ public class RentalAgency implements IRentalAgency {
 	public RentalAgency() {
 		setNameService(new NamingService());
 
-		setReservationSessions(new ArrayList<IReservationSession>());
+		setReservationSessions(new HashMap<String, IReservationSession>());
 		setManagerSession(new ManagerSession(this.getNameService()));
 	}
 
@@ -52,6 +54,7 @@ public class RentalAgency implements IRentalAgency {
 		if (this.getManagerSession() == null)
 			throw new RemoteException("ManagerSession does not exist.");
 		this.setManagerSession(null);
+		System.out.println("ManagerSession is closed in agency");
 	}
 
 	@Override
@@ -60,18 +63,21 @@ public class RentalAgency implements IRentalAgency {
 
 		if (session != null) {
 			this.removeReservationSession(session);
+
 		} else {
 			throw new RemoteException("ReservationSession " + sessionName + " does not exist.");
 		}
+		System.out.println("ReservationSession " + sessionName + " is closed in agency. New amount: "
+				+ getReservationSessions().size());
 	}
 
 	// Getters & Setters
-	public List<IReservationSession> getReservationSessions() {
+	public Map<String, IReservationSession> getReservationSessions() {
 		return reservationSessions;
 	}
 
-	private void setReservationSessions(List<IReservationSession> reservationSessions) {
-		this.reservationSessions = reservationSessions;
+	private void setReservationSessions(HashMap<String, IReservationSession> hashMap) {
+		this.reservationSessions = hashMap;
 	}
 
 	public ManagerSession getManagerSession() {
@@ -90,16 +96,16 @@ public class RentalAgency implements IRentalAgency {
 		this.nameService = nameService;
 	}
 
-	public void addReservationSession(IReservationSession session) {
-		reservationSessions.add(session);
+	public void addReservationSession(IReservationSession session) throws RemoteException {
+		reservationSessions.put(session.getClientName(), session);
 	}
 
-	public void removeReservationSession(IReservationSession session) {
-		reservationSessions.remove(session);
+	public void removeReservationSession(IReservationSession session) throws RemoteException {
+		reservationSessions.remove(session.getClientName());
 	}
 
 	public IReservationSession getReservationSessionByName(String name) throws RemoteException {
-		for (IReservationSession session : getReservationSessions()) {
+		for (IReservationSession session : getReservationSessions().values()) {
 			if (session.getClientName().equals(name)) {
 				return session;
 			}
