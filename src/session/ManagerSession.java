@@ -44,12 +44,12 @@ public class ManagerSession implements IManagerSession {
 
 	@Override
 	public void registerCompany(ICarRentalCompany company) throws RemoteException {
-		nameService.registerCompany(company);
+		getNameService().registerCompany(company);
 	}
 
 	@Override
 	public void unregisterCompany(ICarRentalCompany company) throws RemoteException {
-		nameService.unregisterCompany(company);
+		getNameService().unregisterCompany(company);
 	}
 
 	@Override

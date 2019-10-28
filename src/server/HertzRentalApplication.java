@@ -6,7 +6,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import session.IManagerSession;
 import session.IRentalAgency;
+import session.ManagerSession;
 
 public class HertzRentalApplication extends RentalApplication {
 	public static void main(String[] args)
@@ -23,7 +25,8 @@ public class HertzRentalApplication extends RentalApplication {
 		IRentalAgency agency = (IRentalAgency) registry.lookup("rentalAgency");
 		System.out.println("AGENCY FOUND");
 		
-		agency.registerCompany(iCompany);
+		IManagerSession session = agency.createNewManagerSession("Hertz Manager", hertz.getName());
+		session.registerCompany(iCompany);
 		System.out.println("HERTZ SERVER IS CONNECTED WITH AGENCY");
 	}
 
