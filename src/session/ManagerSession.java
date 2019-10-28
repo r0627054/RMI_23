@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nameserver.INamingService;
 import nameserver.NamingService;
 import server.Car;
 import server.CarType;
@@ -30,15 +31,15 @@ public class ManagerSession implements IManagerSession {
 	/**
 	 * Reference of the NamingService, given by the Agency
 	 */
-	private NamingService nameService;
+	private INamingService nameService;
 
-	public ManagerSession(NamingService nameService, String name, String carRentalName) {
+	public ManagerSession(INamingService nameService, String name, String carRentalName) {
 		this.setNameService(nameService);
 		this.setName(name);
 		this.setCarRentalName(carRentalName);
 	}
 
-	public ManagerSession(NamingService nameService) {
+	public ManagerSession(INamingService nameService) {
 		setNameService(nameService);
 	}
 
@@ -124,11 +125,11 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	// Getters & setters
-	public NamingService getNameService() {
+	public INamingService getNameService() {
 		return nameService;
 	}
 
-	private void setNameService(NamingService nameService) {
+	private void setNameService(INamingService nameService) {
 		this.nameService = nameService;
 	}
 

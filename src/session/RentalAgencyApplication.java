@@ -5,6 +5,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import nameserver.INamingService;
+
 public class RentalAgencyApplication {
 	
 	 public static void main(String[] args) throws RemoteException {
@@ -17,8 +19,13 @@ public class RentalAgencyApplication {
 		 Registry registry = LocateRegistry.getRegistry();
 		 
 		 try {
+			 //Get the naming service from RMI Registry and set the naming service with the agency
+			INamingService nameService = (INamingService) registry.lookup("namingService");
+			iagency.setNameService(nameService);
+			System.out.println("NAMESERVICE FOUND ON AGENCY APPLICATION");
+			
 			registry.rebind("rentalAgency", iagency);
-			System.out.println("Rental AGENCY IS REBOUND");
+			System.out.println("Rental AGENCY IS REBOUND WITH NAMING SERVICE");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
