@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import nameserver.INamingService;
+import server.ICarRentalCompany;
 
 public interface IRentalAgency extends Remote {
 

@@ -1,14 +1,19 @@
 package session;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import nameserver.INamingService;
+import nameserver.NamingService;
+import server.Car;
 import server.CarType;
 import server.ICarRentalCompany;
+import server.Reservation;
 import server.ReservationException;
 
 public class ManagerSession implements IManagerSession {

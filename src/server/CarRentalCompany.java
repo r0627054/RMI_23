@@ -166,7 +166,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 	}
 
 	@Override
-	public synchronized void cancelReservation(Reservation res) {
+	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[] { name, res.toString() });
 		getCar(res.getCarId()).removeReservation(res);
 	}

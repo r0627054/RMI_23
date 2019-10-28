@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import session.IManagerSession;
 import session.IRentalAgency;
+import session.ManagerSession;
 
 public class HertzRentalApplication extends RentalApplication {
 	public static void main(String[] args)

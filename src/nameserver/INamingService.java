@@ -9,13 +9,13 @@ import server.ICarRentalCompany;
 
 public interface INamingService extends Remote {
 
-	void registerCompany(ICarRentalCompany company) throws RemoteException;
-
-	void unregisterCompany(ICarRentalCompany company) throws RemoteException;
-
 	HashMap<String, ICarRentalCompany> getCarRentalCompanies() throws RemoteException;
 
 	ICarRentalCompany getCompany(String name) throws RemoteException;
+
+	void registerCompany(ICarRentalCompany company) throws RemoteException;
+
+	void unregisterCompany(ICarRentalCompany company) throws RemoteException;
 
 	public ArrayList<String> getAllCompanies() throws RemoteException;
 
