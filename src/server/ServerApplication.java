@@ -2,7 +2,6 @@ package server;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
 import nameserver.NamingServiceApplication;
 import session.RentalAgencyApplication;

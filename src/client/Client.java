@@ -12,8 +12,6 @@ import server.Reservation;
 import session.IManagerSession;
 import session.IRentalAgency;
 import session.IReservationSession;
-import session.RentalAgency;
-import session.ReservationSession;
 
 public class Client extends AbstractTestManagement<IReservationSession, IManagerSession> {
 
@@ -41,12 +39,13 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		Client client = new Client("trips", false);
 
 		// ---------------------------------------
-		System.out.println("CLIENT IS CONNECTED");
+		System.out.println("CLIENT IS CONNECTED WITH AGENCY\n\n");
 
 		client.run();
 
-		System.out.println("CLIENT TRYING TO CLOSE ALL SESSIONS");
+		System.out.println("\nCLIENT TRYING TO CLOSE ALL SESSIONS...");
 		client.closeAllSessions();
+		System.out.println("CLIENT SESSIONS CLOSED.");
 	}
 
 	/***************
@@ -55,21 +54,20 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 	public Client(String scriptFile, boolean remote) {
 		super(scriptFile);
-		System.out.println("Client scriptfile loaded");
+		System.out.println("Client scriptfile loaded...");
+
 		try {
 			Registry reg;
 			if (remote) {
 				reg = LocateRegistry.getRegistry("127.0.0.1", 10481);
 			} else {
 				reg = LocateRegistry.getRegistry();
-
 			}
-			this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
 
-//			IReservationSession session = client.getNewReservationSession("Driesje");
-//			session.getCheapestCarType(start, end, region)
-//			agency.closeReservationSession(session.getClientName());
-
+			if (reg != null) {
+				System.out.println("RMI Registry found on client!");
+				this.setAgency((IRentalAgency) reg.lookup("rentalAgency"));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
