@@ -22,7 +22,7 @@ public class DockxRentalApplication extends RentalApplication {
 
 		Registry registry = LocateRegistry.getRegistry();
 		IRentalAgency agency = (IRentalAgency) registry.lookup("rentalAgency");
-		System.out.println("AGENCY FOUND");
+		System.out.println("DOCKX FOUND AGENCY");
 		
 		IManagerSession session = agency.createNewManagerSession("Dockx Manager", dockx.getName());
 		session.registerCompany(iCompany);

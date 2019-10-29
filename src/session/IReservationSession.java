@@ -45,7 +45,7 @@ public interface IReservationSession extends Remote {
 	 * @return the list of all the reservations
 	 * @throws RemoteException if things go wrong.
 	 */
-	List<Reservation> confirmQuotes(String name) throws RemoteException;
+	List<Reservation> confirmQuotes(String name) throws RemoteException, ReservationException;
 
 	/**
 	 * Returns a list of all the available car types between the given dates

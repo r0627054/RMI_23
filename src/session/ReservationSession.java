@@ -67,7 +67,7 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
-	public synchronized List<Reservation> confirmQuotes(String name) throws RemoteException {
+	public synchronized List<Reservation> confirmQuotes(String name) throws RemoteException, ReservationException {
 		List<Reservation> result = new ArrayList<Reservation>();
 		try {
 			for (Quote q : getQuotes()) {
@@ -77,11 +77,13 @@ public class ReservationSession implements IReservationSession {
 					result.add(companyOfQuote.confirmQuote(q));
 				}
 			}
-		} catch (ReservationException | RemoteException e) {
+		} catch (ReservationException e) {
 			System.out.println("Error with confirming quotes! All quotes will be rolled back. NAME= " + name);
 			for (Reservation r : result) {
 				getNameService().getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
+			
+			throw e;
 		}
 		return result;
 	}

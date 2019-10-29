@@ -22,7 +22,7 @@ public class HertzRentalApplication extends RentalApplication {
 
 		Registry registry = LocateRegistry.getRegistry();
 		IRentalAgency agency = (IRentalAgency) registry.lookup("rentalAgency");
-		System.out.println("AGENCY FOUND");
+		System.out.println("HERTZ FOUND AGENCY");
 		
 		IManagerSession session = agency.createNewManagerSession("Hertz Manager", hertz.getName());
 		session.registerCompany(iCompany);
