@@ -27,7 +27,7 @@ public interface IReservationSession extends Remote {
 	 * @param carType The type of the car
 	 * @param region The region where the car needs to be
 	 * @throws RemoteException  if things go wrong.
-	 * @throws ReservationException  if things go wrong.
+	 * @throws ReservationException  if no quote can be created on the companies
 	 */
 	Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException;
@@ -63,8 +63,9 @@ public interface IReservationSession extends Remote {
 	 * @param region the region of the car
 	 * @return the cheapest car type available between the given dates
 	 * @throws RemoteException if things go wrong.
+	 * @throws ReservationException if no car found
 	 */	
-	CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException;
+	CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException, ReservationException;
 	
 	/**
 	 * Returns the name of the session

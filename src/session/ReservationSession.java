@@ -47,9 +47,24 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
+	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
+		List<CarType> result = new ArrayList<CarType>();
+
+		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
+			result.addAll(company.getAvailableCarTypes(start, end));
+		}
+
+		// removing duplicates, maintaining order of list
+		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
+		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
+
+		return resultWithoutDuplicates;
+	}
+
+	@Override
 	public Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
-		
+
 		for (String comp : this.getNameService().getAllCompanies()) {
 			if (this.getNameService().getCompany(comp)
 					.canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
@@ -58,8 +73,9 @@ public class ReservationSession implements IReservationSession {
 				this.addQuote(q);
 				return q;
 			}
+
 		}
-		throw new RemoteException("Cannot create quote");
+		throw new ReservationException("Cannot create quote");
 	}
 
 	@Override
@@ -78,29 +94,14 @@ public class ReservationSession implements IReservationSession {
 			for (Reservation r : result) {
 				getNameService().getCompany(r.getRentalCompany()).cancelReservation(r);
 			}
-			
+
 			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
-		List<CarType> result = new ArrayList<CarType>();
-
-		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
-			result.addAll(company.getAvailableCarTypes(start, end));
-		}
-
-		// removing duplicates, maintaining order of list
-		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
-		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
-
-		return resultWithoutDuplicates;
-	}
-
-	@Override
-	public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException {
+	public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException, ReservationException {
 		CarType result = null;
 		double currentCheapestPrice = Double.MAX_VALUE;
 
@@ -116,7 +117,7 @@ public class ReservationSession implements IReservationSession {
 		}
 
 		if (result == null) {
-			throw new RemoteException("No cars found.");
+			throw new ReservationException("No cars found.");
 		}
 
 		return result;
