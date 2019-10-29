@@ -37,7 +37,7 @@ public interface IReservationSession extends Remote {
 	 * @return the list of all pedning quotes
 	 * @throws RemoteException
 	 */
-	List<Quote> getCurrentQuotes() throws RemoteException;
+	List<Quote> getQuotes() throws RemoteException;
 
 	/**
 	 * Confirms all the quotes
@@ -63,7 +63,7 @@ public interface IReservationSession extends Remote {
 	 * @param region the region of the car
 	 * @return the cheapest car type available between the given dates
 	 * @throws RemoteException if things go wrong.
-	 */
+	 */	
 	CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException;
 	
 	/**
