@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.29)  29 OCT 2019 12:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.29)  29 OCT 2019 13:17
 entering extended mode
 **./report.tex
 (report.tex
-LaTeX2e <2019-10-01>
+LaTeX2e <2019-10-01> patch level 1
 (ds-report.cls
 Document Class: ds-report 2019/10/10 v0.1.0 Report for Distributed Systems
 ("C:\Program Files\MiKTeX 2.9\tex/latex/base\article.cls"
@@ -76,10 +76,10 @@ Package: enumitem 2019/06/20 v3.9 Customized lists
 \enitdp@description=\count91
 )
 ("C:\Program Files\MiKTeX 2.9\tex/generic/babel\babel.sty"
-Package: babel 2019/09/27 3.34 The Babel package
+Package: babel 2019/10/15 3.35 The Babel package
 
 ("C:\Program Files\MiKTeX 2.9\tex/generic/babel\switch.def"
-File: switch.def 2019/09/27 3.34 Babel switching mechanism
+File: switch.def 2019/10/15 3.35 Babel switching mechanism
 )
 *************************************
 * Local config file bblopts.cfg used
@@ -92,7 +92,7 @@ File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
 Language: english 2017/06/06 v3.3r English support from the babel system
 
 ("C:\Program Files\MiKTeX 2.9\tex/generic/babel\babel.def"
-File: babel.def 2019/09/27 3.34 Babel common definitions
+File: babel.def 2019/10/15 3.35 Babel common definitions
 \babel@savecnt=\count92
 \U@D=\dimen105
 
@@ -118,7 +118,7 @@ File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics\graphics.sty"
-Package: graphics 2019/07/20 v1.3b Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2019/10/08 v1.3c Standard LaTeX Graphics (DPC,SPQR)
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics\trig.sty"
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
@@ -232,11 +232,11 @@ l.49
 
  
 Here is how much of TeX's memory you used:
- 4167 strings out of 492452
- 65294 string characters out of 3129807
- 177560 words of memory out of 3000000
- 8466 multiletter control sequences out of 15000+200000
+ 4170 strings out of 492453
+ 65355 string characters out of 3129819
+ 177651 words of memory out of 3000000
+ 8468 multiletter control sequences out of 15000+200000
  9503 words of font info for 31 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 46i,5n,46p,476b,208s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 46i,5n,46p,480b,208s stack positions out of 5000i,500n,10000p,200000b,50000s
 !  ==> Fatal error occurred, no output PDF file produced!
