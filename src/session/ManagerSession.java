@@ -62,7 +62,7 @@ public class ManagerSession implements IManagerSession {
 	public int getNumberOfReservations(String clientName) throws RemoteException {
 		int result = 0;
 
-		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
 			result += company.getReservationsByRenter(clientName).size();
 		}
 

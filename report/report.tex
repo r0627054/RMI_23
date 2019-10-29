@@ -32,7 +32,9 @@ class.} \mbox{}\\
 
 	\paragraph{4. What data has to be transmitted between client and server and back when requesting the number
 of reservations of a specific renter?} \mbox{}\\
-	Answer 2
+	When calling the getNumberOfReservationsByRenter method in the Client class, two parameters are required: the client name of which the client wishes to reveive the information and a remote object reference of the IManagerSession. This IManagerSession is stored on the RentalAgency. On this IManagerSession reference the client will (remotely) call the getNumberOfReservations method with the same clientName parameter. This clientName String will be marshalled and send by value to the RentalAgency. 
+In RentalAgency we will loop over each ICarRentalCompany that the NameService has a remote reference of, calling the getReservationsByRenter() method on each ICarRentalCompany reference and add the size of the list to the total. These references of the ICarRentalCompanies are stored beforehand by the same ManagerSession. 
+Finally the the RentalAgency will return the total amount of reservations of the renter back to the Client.
 
 	\paragraph{5. What is the reasoning behind your distribution of remote objects over hosts? Show which
 hosts execute which classes, if run in a real distributed deployment (not a lab deployment where
