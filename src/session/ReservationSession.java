@@ -40,14 +40,24 @@ public class ReservationSession implements IReservationSession {
 	 */
 	private INamingService nameService;
 
+	/**
+	 * Boolean to register if the session is closed.
+	 */
+	private boolean isClosed;
+
 	public ReservationSession(String clientName, INamingService nameService) {
 		setClientName(clientName);
 		setNameService(nameService);
 		setQuotes(new ArrayList<Quote>());
+		setClosed(false);
 	}
 
 	@Override
-	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
+	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
+
 		List<CarType> result = new ArrayList<CarType>();
 
 		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
@@ -64,6 +74,9 @@ public class ReservationSession implements IReservationSession {
 	@Override
 	public Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 
 		for (String comp : this.getNameService().getAllCompanies()) {
 			if (this.getNameService().getCompany(comp)
@@ -80,6 +93,10 @@ public class ReservationSession implements IReservationSession {
 
 	@Override
 	public synchronized List<Reservation> confirmQuotes(String name) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
+		
 		List<Reservation> result = new ArrayList<Reservation>();
 		try {
 			for (Quote q : getQuotes()) {
@@ -101,7 +118,12 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
-	public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException, ReservationException {
+	public CarType getCheapestCarType(Date start, Date end, String region)
+			throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
+		
 		CarType result = null;
 		double currentCheapestPrice = Double.MAX_VALUE;
 
@@ -125,6 +147,11 @@ public class ReservationSession implements IReservationSession {
 
 	public void addQuote(Quote quote) throws RemoteException {
 		this.getQuotes().add(quote);
+	}
+	
+	@Override
+	public void closeSession() throws RemoteException{
+		this.setClosed(true);
 	}
 
 	// Setters & getters
@@ -152,6 +179,14 @@ public class ReservationSession implements IReservationSession {
 
 	private void setNameService(INamingService nameService) {
 		this.nameService = nameService;
+	}
+
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	private void setClosed(boolean isClosed) {
+		this.isClosed = isClosed;
 	}
 
 }

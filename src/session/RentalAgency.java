@@ -70,6 +70,7 @@ public class RentalAgency implements IRentalAgency {
 
 			if (session != null) {
 				this.removeReservationSession(session);
+				session.closeSession();
 
 			} else {
 				throw new RemoteException("ReservationSession " + sessionName + " does not exist.");

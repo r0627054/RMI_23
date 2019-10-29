@@ -12,7 +12,7 @@
 	\paragraph{1. How would a client complete one full cycle of the booking process, for both a successful and
 failed case? Base yourself on the example scenarios in Figure 1. Create sequence drawings to
 illustrate this.} \mbox{}\\
-	Hier gaan we een sequence d
+	Hier gaan we een sequence diagram maken TODO
 	
 	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} \mbox{}\\
 When a Java class implements the Serializable interface, an instance of this class can be passed as a result or an argument in Java RMI. These instances, just as all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this copied object, methods can be invoked but this will only change the local object. The state of the local object can be different from the state of the original object of the sender. \\
@@ -51,14 +51,22 @@ highlight where the client and server are.} \mbox{}\\
 
 	\paragraph{6. How have you implemented the naming service, and what role does the built-in RMI registry play?
 Why did you take this approach?} \mbox{}\\
-	Answer 2
+	Our NamingService class uses a HashMap<String, ICarRentalCompany> to save all the companies along with their name. We used this data structure to be able to get and set values as fast as possible, with no possibility of duplicate key values occuring. 
+The NamingService itself implements an INamingService class which extends the Remote interface with all the critical methods, so that we are able to register any NamingService instance on the RMI registry. We stored this remote object reference on the RMI registry so that the RentalAgency is less coupled with the NamingService. For example if the naming service would run on a seperate server, this would be easy achievable since we would only need to specify the adress of the correct RMI registry.\\
+
+We store only two remote references on the built-in RMI registry: the INamingService and the IRentalAgency. The clients should only lookup the IRentalAgency, since the INamingService is only used by the rental agency to lookup and store the remote object reference.
 
 	\paragraph{7. Which approach did you take to achieve life cycle management of sessions? Indicate why you
 picked this approach, in particular where you store the sessions.} \mbox{}\\
-	Answer 2
+We store the ReservationSessions inside a HashMap<String, IReservationSession> on the RentalAgency. This class is responsible to create and storing the sessions, on client request. When the client asks for a ReservationSession, we first try to find an existing ReservationSession with the same client name. If this exists, the RentalAgency will return this already existing session, if this does not exist, a new ReservationSession will be created and stored in the map.\\
+A single ManagerSession is created and stored on startup, when the RentalAgency is created. This remote reference is, the same way as the ReservationSession, given to the client on demand.\\
+\mbox{}\\
+Closing of ReservationSessions happens when the client invokes the closeReservationSession method. The name of the client (which is the same name as the session) is given as an argument to the remote procedure. The RentalAgency searches the session who has the matching session name, and removes this session from the map. And finally a boolean field in the ReservationSession instance is set to true, that indicates the session is closed. This boolean value is checked when methods are called in case the user tries to call functions with closed sessions afterwards.
+
 
 	\paragraph{8. Why is a Java RMI application not thread-safe by default? How does your application of synchronization achieve thread-safety?} \mbox{}\\
-	Answer 2
+When two or more clients call the same function at the same time, unexpected behaviour can occur. This is due the way a CPU handles concurrency, which makes processes like this application temporarily pause, to give another process time to run. When the CPU is currently processing the first call of a method and decides to pause without this method finishing, it is possible another client will call the same method with uncertain behaviour. The exact behaviour depends on the instruction where the first stopped and is impossible to reliably tell what the end result will be.\\
+To achieve synchronization in Java, we have two choices: we either set the synchronized tag on the method declaration or we use the synchonized tag on a certain data structure. The first option means that if the client calls this function, the server will never pause this method during execution because of concurrency. The second option 'locks' a certain data structure for a certain amount of expressions, in which this object will never be able to be changed by another process that wishes to do so. This means the second option is a more loose option to do concurrency control since the CPU is still are able to pause for other processes, but only if they do not use this data structure.
 
 	\paragraph{9. How does your solution to concurrency control aspect the scalability of your design? Could
 synchronization become a bottleneck?} \mbox{}\\

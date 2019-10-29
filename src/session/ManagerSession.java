@@ -28,28 +28,43 @@ public class ManagerSession implements IManagerSession {
 	 */
 	private INamingService nameService;
 
+	/**
+	 * Boolean to store if the manager session is closed
+	 */
+	private boolean isClosed;
+
 	public ManagerSession(INamingService nameService, String name, String carRentalName) {
 		this.setNameService(nameService);
 		this.setName(name);
 		this.setCarRentalName(carRentalName);
+		this.setClosed(false);
 	}
 
 	public ManagerSession(INamingService nameService) {
-		setNameService(nameService);
+		this(nameService, "manager", "ManagerSession");
 	}
 
 	@Override
-	public void registerCompany(ICarRentalCompany company) throws RemoteException {
+	public void registerCompany(ICarRentalCompany company) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		getNameService().registerCompany(company);
 	}
 
 	@Override
-	public void unregisterCompany(ICarRentalCompany company) throws RemoteException {
+	public void unregisterCompany(ICarRentalCompany company) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		getNameService().unregisterCompany(company);
 	}
 
 	@Override
-	public int getNumberOfReservationsByCarType(String type, String carRentalName) throws RemoteException {
+	public int getNumberOfReservationsByCarType(String type, String carRentalName) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		try {
 			return nameService.getCompany(carRentalName).getNumberOfReservationsForCarType(type);
 		} catch (ReservationException e) {
@@ -59,7 +74,10 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public int getNumberOfReservations(String clientName) throws RemoteException {
+	public int getNumberOfReservations(String clientName) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		int result = 0;
 
 		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
@@ -70,21 +88,24 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public Set<String> getBestCustomers() throws RemoteException {
+	public Set<String> getBestCustomers() throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		// key: customer name, value: nbr of purchases
 		Map<String, Integer> customers = new HashMap<>();
 
 		// Get all values of amount of purchases for each customer
 		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
-			
-			//Get best customers for each company
+
+			// Get best customers for each company
 			Map<String, Integer> customersTemp = company.getBestCustomer();
 
-			//Check for each entry if it existed in customers map.
-			//If not existed, put new key/value pair.
-			//If exitsted, put same key with added values.
+			// Check for each entry if it existed in customers map.
+			// If not existed, put new key/value pair.
+			// If exitsted, put same key with added values.
 			for (Map.Entry<String, Integer> entry : customersTemp.entrySet()) {
-				
+
 				if (customers.get(entry.getKey()) == null) {
 					customers.put(entry.getKey(), entry.getValue());
 				} else {
@@ -114,7 +135,10 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws RemoteException {
+	public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws RemoteException, ReservationException {
+		if (isClosed()) {
+			throw new ReservationException("Session is already closed.");
+		}
 		ICarRentalCompany company = getNameService().getCompany(carRentalCompanyName);
 		return company.getMostPopularCarTypeIn(year);
 	}
@@ -142,6 +166,14 @@ public class ManagerSession implements IManagerSession {
 
 	private void setCarRentalName(String carRentalName) {
 		this.carRentalName = carRentalName;
+	}
+
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	private void setClosed(boolean isClosed) {
+		this.isClosed = isClosed;
 	}
 
 }

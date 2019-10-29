@@ -53,8 +53,9 @@ public interface IReservationSession extends Remote {
 	 * @param end   The end date
 	 * @return the list of all the car types between the given dates
 	 * @throws RemoteException  if things go wrong.
+	 * @throws ReservationException 
 	 */
-	List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException;
+	List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException, ReservationException;
 
 	/**
 	 * Returns the cheapest car type for the given region between the dates.
@@ -73,5 +74,11 @@ public interface IReservationSession extends Remote {
 	 * @throws RemoteException if things go wrong.
 	 */
 	String getClientName() throws RemoteException;
+
+	/**
+	 * Closes the session
+	 * @throws RemoteException if things go wrong.
+	 */
+	void closeSession() throws RemoteException;
 
 }
