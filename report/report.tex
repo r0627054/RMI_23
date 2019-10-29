@@ -23,11 +23,12 @@ Classes need to be serializable when the value of the object of such a class is 
 	\item Quote
 	\item Reservation
 \end{itemize}
-The following classes, used in our project, are already serializable: String, Date, HashSet, ArrayList and HashMap.
+The following classes, used in our project, are already serializable: String, Date, HashSet, ArrayList and HashMap.\\
+To illustrate this with an example: The client can request a list of available car types. He requests this list by invoking the getAvailableCarTypes method on the remote object reference of his reservation session. This will return an ArrayList of car types. These types are passed by value, this is done because the client is not allowed to change the information of the actual car types.
 
 	\paragraph{3. When do classes need to be remotely accessible (Remote)? You may illustrate this with an example
 class.} \mbox{}\\
-When a Java class implements the 
+Instances of classes which are remotely accessible (implement the remote interface) are passed by remote object reference. The object which receives this remote object reference can make RMI calls on this remote object. Because no copy is made of the object, the original object of the sender is modified. 
 
 	\paragraph{4. What data has to be transmitted between client and server and back when requesting the number
 of reservations of a specific renter?} \mbox{}\\
