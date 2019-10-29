@@ -1,5 +1,4 @@
 \documentclass{ds-report}
-
 \assignment{JAVA RMI} % Set to `Java RMI`, `Java EE` or `Google App Engine`.
 \authorOne{Dries Janse} % Name of first team partner.
 \studentnumberOne{r0627054} % Student number of first team partner.
@@ -16,7 +15,16 @@ illustrate this.} \mbox{}\\
 	Hier gaan we een sequence d
 	
 	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} \mbox{}\\
-When a Java class implements the Serializable interface, an object of this class can be passed as a result or an argument in Java RMI. These objects, just a all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this new copy object methods can be invoked, but this will only change the local object. The state of the local object can be different from the state of the original object of the sender.
+When a Java class implements the Serializable interface, an object of this class can be passed as a result or an argument in Java RMI. These objects, just as all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this new copy object methods can be invoked, but this will only change the local object. The state of the local object can be different from the state of the original object of the sender. \\
+Classes need to be serializable when the value of the object of such a class is needed. The users (clients) of these classes are not allowed to modify the original objects. In our project, we made the following classes explicitly serializable:
+\begin{enumerate}
+	\item CarType 
+	\item ReservationConstraintes
+	\item Quote
+	\item Reservation
+\end{enumerate}
+
+The following classes, used in our project, are already serializable: String, Date, HashSet, ArrayList and HashMap.
 
 	\paragraph{3. When do classes need to be remotely accessible (Remote)? You may illustrate this with an example
 class.} \mbox{}\\
