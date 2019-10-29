@@ -78,6 +78,24 @@ public class RentalAgency implements IRentalAgency {
 					+ getReservationSessions().size());
 		}
 	}
+	
+
+	public void addReservationSession(IReservationSession session) throws RemoteException {
+		reservationSessions.put(session.getClientName(), session);
+	}
+
+	public void removeReservationSession(IReservationSession session) throws RemoteException {
+		reservationSessions.remove(session.getClientName());
+	}
+
+	public IReservationSession getReservationSessionByName(String name) throws RemoteException {
+		for (IReservationSession session : getReservationSessions().values()) {
+			if (session.getClientName().equals(name)) {
+				return session;
+			}
+		}
+		return null;
+	}
 
 	// Getters & Setters
 	public Map<String, IReservationSession> getReservationSessions() {
@@ -107,23 +125,6 @@ public class RentalAgency implements IRentalAgency {
 		} else {
 			throw new RemoteException("Cannot set a null naming service");
 		}
-	}
-
-	public void addReservationSession(IReservationSession session) throws RemoteException {
-		reservationSessions.put(session.getClientName(), session);
-	}
-
-	public void removeReservationSession(IReservationSession session) throws RemoteException {
-		reservationSessions.remove(session.getClientName());
-	}
-
-	public IReservationSession getReservationSessionByName(String name) throws RemoteException {
-		for (IReservationSession session : getReservationSessions().values()) {
-			if (session.getClientName().equals(name)) {
-				return session;
-			}
-		}
-		return null;
 	}
 
 }

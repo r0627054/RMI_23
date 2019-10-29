@@ -49,6 +49,7 @@ public class ReservationSession implements IReservationSession {
 	@Override
 	public Quote createQuote(String name, Date start, Date end, String carType, String region)
 			throws RemoteException, ReservationException {
+		
 		for (String comp : this.getNameService().getAllCompanies()) {
 			if (this.getNameService().getCompany(comp)
 					.canCreateQuote(new ReservationConstraints(start, end, carType, region), name)) {
@@ -59,11 +60,6 @@ public class ReservationSession implements IReservationSession {
 			}
 		}
 		throw new RemoteException("Cannot create quote");
-	}
-
-	@Override
-	public List<Quote> getCurrentQuotes() throws RemoteException {
-		return getQuotes();
 	}
 
 	@Override
@@ -92,11 +88,11 @@ public class ReservationSession implements IReservationSession {
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		List<CarType> result = new ArrayList<CarType>();
 
-		for (ICarRentalCompany company : nameService.getCarRentalCompanies().values()) {
+		for (ICarRentalCompany company : getNameService().getCarRentalCompanies().values()) {
 			result.addAll(company.getAvailableCarTypes(start, end));
 		}
 
-		// removing duplicates
+		// removing duplicates, maintaining order of list
 		LinkedHashSet<CarType> resultSet = new LinkedHashSet<>(result);
 		List<CarType> resultWithoutDuplicates = new ArrayList<>(resultSet);
 
@@ -126,7 +122,7 @@ public class ReservationSession implements IReservationSession {
 		return result;
 	}
 
-	public void addQuote(Quote quote) {
+	public void addQuote(Quote quote) throws RemoteException {
 		this.getQuotes().add(quote);
 	}
 
@@ -140,7 +136,8 @@ public class ReservationSession implements IReservationSession {
 		this.clientName = clientName;
 	}
 
-	public List<Quote> getQuotes() {
+	@Override
+	public List<Quote> getQuotes() throws RemoteException {
 		return quotes;
 	}
 

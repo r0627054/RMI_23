@@ -76,11 +76,11 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 
 	}
 
+	// Get Session methods
 	@Override
 	protected IReservationSession getNewReservationSession(String name) throws Exception {
 		System.out.println("New Reservation session is created");
-		IReservationSession session = this.getAgency().createNewReservationSession(name);
-		return session;
+		return this.getAgency().createNewReservationSession(name);
 	}
 
 	@Override
@@ -89,6 +89,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return this.getAgency().createNewManagerSession(name, carRentalName);
 	}
 
+	// Reservation Session methods
 	@Override
 	protected void checkForAvailableCarTypes(IReservationSession session, Date start, Date end) throws Exception {
 		System.out.println("CLIENT: Check for available car types");
@@ -96,7 +97,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		for (CarType car : availableCarTypes) {
 			System.out.println(car);
 		}
-		System.out.println("\n\n");
+		System.out.println("\n");
 	}
 
 	@Override
@@ -112,6 +113,14 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return session.confirmQuotes(name);
 	}
 
+	@Override
+	protected String getCheapestCarType(IReservationSession session, Date start, Date end, String region)
+			throws Exception {
+		System.out.println("CLIENT requests the cheapest car type");
+		return session.getCheapestCarType(start, end, region).getName();
+	}
+
+	// Manager Session methods
 	@Override
 	protected int getNumberOfReservationsByRenter(IManagerSession ms, String clientName) throws Exception {
 		System.out.println("CLIENT requests number of reservations by renter");
@@ -129,13 +138,6 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 	protected Set<String> getBestClients(IManagerSession ms) throws Exception {
 		System.out.println("CLIENT requests all the best clients");
 		return ms.getBestCustomers();
-	}
-
-	@Override
-	protected String getCheapestCarType(IReservationSession session, Date start, Date end, String region)
-			throws Exception {
-		System.out.println("CLIENT requests the cheapest car type");
-		return session.getCheapestCarType(start, end, region).getName();
 	}
 
 	@Override
