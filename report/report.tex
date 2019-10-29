@@ -2,48 +2,49 @@
 
 \assignment{JAVA RMI} % Set to `Java RMI`, `Java EE` or `Google App Engine`.
 \authorOne{Dries Janse} % Name of first team partner.
-\studentnumberOne{r06} % Student number of first team partner.
+\studentnumberOne{r0627054} % Student number of first team partner.
 \authorTwo{Steven Ghekiere} % Name of second team partner.
 \studentnumberTwo{r0626062}  % Student number of second team partner.
+
 
 \begin{document}
 	\maketitle
 
 	\paragraph{1. How would a client complete one full cycle of the booking process, for both a successful and
 failed case? Base yourself on the example scenarios in Figure 1. Create sequence drawings to
-illustrate this.} 
-	Answer 1
+illustrate this.} \mbox{}\\
+	Hier gaan we een sequence d
 	
-	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} 
-	Answer 2
+	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} \mbox{}\\
+When a Java class implements the Serializable interface, an object of this class can be passed as a result or an argument in Java RMI. These objects, just a all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this new copy object methods can be invoked, but this will only change the local object. The state of the local object can be different from the state of the original object of the sender.
 
 	\paragraph{3. When do classes need to be remotely accessible (Remote)? You may illustrate this with an example
-class.} 
+class.} \mbox{}\\
 	Answer 2
 
 	\paragraph{4. What data has to be transmitted between client and server and back when requesting the number
-of reservations of a specific renter?} 
+of reservations of a specific renter?} \mbox{}\\
 	Answer 2
 
 	\paragraph{5. What is the reasoning behind your distribution of remote objects over hosts? Show which
 hosts execute which classes, if run in a real distributed deployment (not a lab deployment where
 everything runs on the same machine). Create a component/deployment diagram to illustrate this:
-highlight where the client and server are.} 
+highlight where the client and server are.} \mbox{}\\
 	Answer 2
 
 	\paragraph{6. How have you implemented the naming service, and what role does the built-in RMI registry play?
-Why did you take this approach?} 
+Why did you take this approach?} \mbox{}\\
 	Answer 2
 
 	\paragraph{7. Which approach did you take to achieve life cycle management of sessions? Indicate why you
-picked this approach, in particular where you store the sessions.} 
+picked this approach, in particular where you store the sessions.} \mbox{}\\
 	Answer 2
 
-	\paragraph{8. Why is a Java RMI application not thread-safe by default? How does your application of synchronization achieve thread-safety?} 
+	\paragraph{8. Why is a Java RMI application not thread-safe by default? How does your application of synchronization achieve thread-safety?} \mbox{}\\
 	Answer 2
 
 	\paragraph{9. How does your solution to concurrency control aspect the scalability of your design? Could
-synchronization become a bottleneck?} 
+synchronization become a bottleneck?} \mbox{}\\
 	Answer 2
 
 	
