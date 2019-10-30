@@ -15,20 +15,21 @@ illustrate this.} \mbox{}\\
 	Hier gaan we een sequence diagram maken TODO
 	
 	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} \mbox{}\\
-When a Java class implements the Serializable interface, an instance of this class can be passed as a result or an argument in Java RMI. These instances, just as all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this copied object, methods can be invoked but this will only change the local object. The state of the local object can be different from the state of the original object of the sender. \\
-Classes need to be serializable when the value of the object of such a class is needed. The users of these classes are not allowed to modify the original objects. In our project, we made the following classes explicitly serializable:
+When a Java class implements the java.io.Serializable interface, an instance of this class can be passed as a result or an argument in Java RMI. These instances, just as all primitive types, are copied and passed by value. This means that the receiver creates a copy of the object. On this copied object, methods can be invoked but this will only change the local object. The state of the local object can be different from the state of the original object of the sender. \\\\
+Classes need to be serializable when the value of the object of such a class is needed. The users, of these classes, are not allowed to modify the original objects. In our project, we made the following classes explicitly serializable:
 \begin{itemize}
 	\item CarType 
 	\item ReservationConstraints 
 	\item Quote
 	\item Reservation (subclass of Quote)
 \end{itemize}
-The following classes, used in our project, are already serializable: String, Date, HashSet, ArrayList and HashMap.\\
-To illustrate this with an example: The client class can request a list of available car types. It requests this list by invoking the getAvailableCarTypes method on the remote object reference of his reservation session. This will return an ArrayList of car types. These types are passed by value, this is done because the client classes are not allowed to change the information of the actual car types.
+The following classes, used in our project, are already serializable: String, Date, HashSet, ArrayList and HashMap.\\\\
+To illustrate this with an example: the client class can request a list of available car types. It requests this list by invoking the getAvailableCarTypes method on the remote object reference of his reservation session. This will return an ArrayList of car types. These types are passed by value, this is done because the client classes are not allowed to change the information of the actual car types.
 
 	\paragraph{3. When do classes need to be remotely accessible (Remote)? You may illustrate this with an example
 class.} \mbox{}\\
-Instances of classes which are remotely accessible (implement the java.rmi.Remote interface) are passed by remote object reference. The object which receives this remote object reference can make RMI calls on this remote object. Because no copy is made of the object, the original object of the sender is modified. For all the classes, which have to be remote, have to implement an interface specifying all the methods which can be invoked remotely. This interface directly implements the java.rmi.Remote interface and is extended by the remote class. In our project we created the following remote interfaces:
+Instances of classes which are remotely accessible (implement the java.rmi.Remote interface) are passed by remote object reference. The object which receives this remote object reference can make RMI calls on this remote object. Because no copy is made of the object, the original object of the sender is modified. All the classes, which have to be remote, have to implement an interface specifying all the methods which can be invoked remotely. This interface directly extends the java.rmi.Remote interface and is implemented by the remote class.\\\\
+In our project we created the following remote interfaces:
 \begin{itemize}
 	\item INamingService
 	\item ICarRentalCompany
@@ -36,29 +37,27 @@ Instances of classes which are remotely accessible (implement the java.rmi.Remot
 	\item IReservationSession
 	\item IRentalAgency
 \end{itemize} 
-The INamingService is a remote interface used for registering, unregistering and requesting car rental companies to the naming service. The ICarRentalCompany is a remote interface used for requesting and manipulating car rental company data. It is used by both the reservation and manager session. The IReservationSession is a remote interface used for creating, requesting, confirming quotes and requesting car types. The IManagerSession is a remote interface used for registering/unregistering car rental companies and general information about the number of reservations, best customers and popular car types. The IRentalAgency is a remote interface used for creating and closing sessions.
+The INamingService is a remote interface used for registering, unregistering and requesting car rental companies to the naming service. The ICarRentalCompany is a remote interface used for requesting and manipulating car rental company data. It is used by both the reservation and manager session. The IReservationSession is a remote interface used for creating, requesting, confirming quotes and requesting car types. The IManagerSession is a remote interface used for registering/unregistering car rental companies and requesting general information such as the number of reservations, best customers and popular car types. The IRentalAgency is a remote interface used for creating and closing sessions.
 
 	\paragraph{4. What data has to be transmitted between client and server and back when requesting the number of reservations of a specific renter?} \mbox{}\\
-When calling the getNumberOfReservationsByRenter method in the Client class, two parameters are required: the client name of which the client wishes to receive the information and a remote object reference of the IManagerSession. This IManagerSession is stored on the RentalAgency. On this IManagerSession reference the client will (remotely) call the getNumberOfReservations method with the same clientName parameter. This clientName String will be marshalled and send by value to the RentalAgency. 
-In RentalAgency we will loop over each ICarRentalCompany that the NameService has a remote reference of, calling the getReservationsByRenter() method on each ICarRentalCompany reference and add the size of the list to the total. These references of the ICarRentalCompanies are stored beforehand by the same ManagerSession. 
-Finally the the RentalAgency will return the total amount of reservations of the renter back to the Client.
+When calling the getNumberOfReservationsByRenter method in the client class, two parameters are required: the name of the client of which the client wishes to receive the information and a remote object reference of the IManagerSession. This IManagerSession is stored on the RentalAgency server. On this IManagerSession reference the client will invoke the remote getNumberOfReservations method, which needs to name of the client. This client name string will be marshalled and send by value to the RentalAgency server where the manager session is stored. It will first request all the car rental companies references at the naming service. The naming service server will return all the car rental company references it has to the rental agency server. The manager session does this by invoking the getCarRentalCompanies method on the naming service reference.
+Thereafter, the getReservationsByRenter method is called by the manager session on each of the car rental companies references, to calculate the total amount of reservations. Finally the manager session stored on the rental agency server will return the total amount of reservations of the renter back to the client by value.   
 
-	\paragraph{5. What is the reasoning behind your distribution of remote objects over hosts? Show which
-hosts execute which classes, if run in a real distributed deployment (not a lab deployment where
+
+	\paragraph{5. What is the reasoning behind your distribution of remote objects over hosts? Show which hosts execute which classes, if run in a real distributed deployment (not a lab deployment where
 everything runs on the same machine). Create a component/deployment diagram to illustrate this:
-highlight where the client and server are.} \mbox{}\\
+highlight where the client and server are.} \mbox{}\\\\
 	Answer 2
 
-	\paragraph{6. How have you implemented the naming service, and what role does the built-in RMI registry play?
-Why did you take this approach?} \mbox{}\\
-	Our NamingService class uses a HashMap<String, ICarRentalCompany> to save all the companies along with their name. We used this data structure to be able to get and set values as fast as possible, with no possibility of duplicate key values occuring. 
-The NamingService itself implements an INamingService class which extends the Remote interface with all the critical methods, so that we are able to register any NamingService instance on the RMI registry. We stored this remote object reference on the RMI registry so that the RentalAgency is less coupled with the NamingService. For example if the naming service would run on a seperate server, this would be easy achievable since we would only need to specify the adress of the correct RMI registry.\\
+	\paragraph{6. How have you implemented the naming service, and what role does the built-in RMI registry play? Why did you take this approach?} \mbox{}\\\\
+The NamingService class is used to store all the ICarRentalCompany remote object references. It does this by making use of a HashMap where the key is the name of the company and the value is the remote object reference of the car rental company. By making use of this data structure a company reference is easily accessed by its name and no duplicate companies can exist.\\\\
+The NamingService class itself implements the INamingService interface. This interface extends the java.rmi.Remote interface and contains the methods to register, unregister and request remote car rental company object references.\\\\
+To start the naming server, a NamingServiceApplication class is used. This class only contains a main method which creates an instance of the naming service, exports it as a remote object and binds it to the RMI registry. The car rental agency can lookup this naming service on the RMI registry.\\\\
+This design is chosen because it ensures that the components are loosely coupled and have high cohesion. This design makes it possible to run the naming service on a different server than the car rental agency. The car rental agency only needs an identifier of the naming server so it can lookup the remote object reference using the RMI registry.
+ 
 
-We store only two remote references on the built-in RMI registry: the INamingService and the IRentalAgency. The clients should only lookup the IRentalAgency, since the INamingService is only used by the rental agency to lookup and store the remote object reference.
-
-	\paragraph{7. Which approach did you take to achieve life cycle management of sessions? Indicate why you
-picked this approach, in particular where you store the sessions.} \mbox{}\\
-We store the ReservationSessions inside a HashMap<String, IReservationSession> on the RentalAgency. This class is responsible to create and storing the sessions, on client request. When the client asks for a ReservationSession, we first try to find an existing ReservationSession with the same client name. If this exists, the RentalAgency will return this already existing session, if this does not exist, a new ReservationSession will be created and stored in the map.\\
+	\paragraph{7. Which approach did you take to achieve life cycle management of sessions? Indicate why you picked this approach, in particular where you store the sessions.} \mbox{}\\
+All the sessions, bot the manager and reservation sessions, are stored on the rental agency. The reservation sessions are stored in a HashMap, as key the name of the client and the value of the session. The rental agency is responsible for creating, storing and closing sessions. When the client asks for a ReservationSession, we first try to find an existing ReservationSession with the same client name. If this exists, the RentalAgency will return this already existing session, if this does not exist, a new ReservationSession will be created and stored in the map.\\
 A single ManagerSession is created and stored on startup, when the RentalAgency is created. This remote reference is, the same way as the ReservationSession, given to the client on demand.\\
 \mbox{}\\
 Closing of ReservationSessions happens when the client invokes the closeReservationSession method. The name of the client (which is the same name as the session) is given as an argument to the remote procedure. The RentalAgency searches the session who has the matching session name, and removes this session from the map. And finally a boolean field in the ReservationSession instance is set to true, that indicates the session is closed. This boolean value is checked when methods are called in case the user tries to call functions with closed sessions afterwards.
