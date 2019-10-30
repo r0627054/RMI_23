@@ -67,14 +67,14 @@ To achieve synchronization in Java, there are two choices: either the synchroniz
 We made use of synchronization in the application in the following classes:
 \begin{itemize}
 	\item NamingService: in both the register and unregister methods, the companies HashMap is synchronized. 
-	\item CarRentalCompany: both the cancelReservationSession and confirmQuote methods are synchronized.
+	\item CarRentalCompany: the cancelReservationSession method is synchronized.
+	\item ReservationSession: the confirm quotes is method is synchronized.
 	\item RentalAgency: in the createNewReservationSession, createNewManagerSession, closeManagerSession and CloseReservationSession, the sessions map is synchronized.
 \end{itemize} 
 
 
-	\paragraph{9. How does your solution to concurrency control aspect the scalability of your design? Could
-synchronization become a bottleneck?} \mbox{}\\
-	Answer 2
+	\paragraph{9. How does your solution to concurrency control affect the scalability of your design? Could synchronization become a bottleneck?} \mbox{}\\
+	
 
 	
 	\clearpage
