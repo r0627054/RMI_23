@@ -11,7 +11,7 @@ public interface IRentalAgency extends Remote {
 
 	IManagerSession createNewManagerSession(String name, String carRentalName) throws RemoteException;
 	
-	void closeManagerSession() throws RemoteException;
+	void closeManagerSession(String sessionName) throws RemoteException;
 	
 	void closeReservationSession(String sessionName) throws RemoteException;
 

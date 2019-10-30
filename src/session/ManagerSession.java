@@ -142,6 +142,11 @@ public class ManagerSession implements IManagerSession {
 		ICarRentalCompany company = getNameService().getCompany(carRentalCompanyName);
 		return company.getMostPopularCarTypeIn(year);
 	}
+	
+	@Override
+	public void closeSession() throws RemoteException {
+		this.setClosed(true);
+	}
 
 	// Getters & setters
 	public INamingService getNameService() {
@@ -152,6 +157,7 @@ public class ManagerSession implements IManagerSession {
 		this.nameService = nameService;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
