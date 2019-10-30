@@ -44,7 +44,7 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		client.run();
 
 		System.out.println("\nCLIENT TRYING TO CLOSE ALL SESSIONS...");
-		client.closeAllSessions();
+		client.closeAllTripsSessions();
 		System.out.println("CLIENT SESSIONS CLOSED.");
 	}
 
@@ -147,12 +147,11 @@ public class Client extends AbstractTestManagement<IReservationSession, IManager
 		return ms.getMostPopularCarTypeIn(carRentalCompanyName, year);
 	}
 
-	private void closeAllSessions() throws RemoteException {
+	private void closeAllTripsSessions() throws RemoteException {
 		for (String reservationSessionName : sessions.keySet()) {
 			getAgency().closeReservationSession(reservationSessionName);
 		}
 		getAgency().closeReservationSession(managerResSession.getClientName());
-		getAgency().closeManagerSession();
 	}
 
 	// Getters & Setters
