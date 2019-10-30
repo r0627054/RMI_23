@@ -74,7 +74,7 @@ We made use of synchronization in the application in the following classes:
 
 
 	\paragraph{9. How does your solution to concurrency control affect the scalability of your design? Could synchronization become a bottleneck?} \mbox{}\\
-	
+All the synchronization in the project is used to achieve thread-safety. For a small agency application is does not create a bottleneck. But if the application is scaled up, there will be bottleneck. The rental agency will be come the single point of failure because this contains all the sessions which will handle the confirmation of quotes. Theses quotes are confirmed in a synchronized way. A possible solutions for this problem is to handle quote confirmation in a concurrent way, this can be done if the list of quotes do not contain the same companies. Also the session management can become a bottleneck because the map needs to be synchronized.
 
 	
 	\clearpage
