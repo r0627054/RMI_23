@@ -89,7 +89,7 @@ public abstract class AbstractTestManagement<ReservationSession, ManagerSession>
 		}
 		
 		if (cmd.equals("MB")) {
-           Set<String> bestClientsShouldBe = new HashSet<String>(Arrays.asList(name.split("/")));
+           Set<String> bestClientsShouldBe = new HashSet<String>(Arrays.asList(scriptLineTokens.nextToken().split("/")));
            Set<String> bestClientsAre = null;
 			try {
 				ManagerSession aMgmtSession = getNewManagerSession("CarRent", name);	            

@@ -11,7 +11,7 @@
 
 	\paragraph{1. How would a client complete one full cycle of the booking process, for both a successful and
 failed case? Base yourself on the example scenarios of the assignment. Create sequence drawings to illustrate this.} \mbox{}\\\\
-The complete cycle of the booking process, based on the example scenarios given in the assignment are visualized in Figure \ref{fig:sequence_diagram}.
+The complete cycle of the booking process, based on the example scenarios as given in the assignment are visualized in Figure \ref{fig:sequence_diagram}.
 
 	
 	\paragraph{2. When do classes need to be serializable? You may illustrate this with an example class.} \mbox{}\\\\
@@ -45,7 +45,6 @@ Thereafter, the getReservationsByRenter method is called by the manager session 
 
 \clearpage
 	\paragraph{5. What is the reasoning behind your distribution of remote objects over hosts? Show which hosts execute which classes, if run in a real distributed deployment (not a lab deployment where everything runs on the same machine). Create a component/deployment diagram to illustrate this: highlight where the client and server are.} \mbox{}\\\\
-
 Figure \ref{fig:deployment_diagram} show the deployment diagram of the application. This diagram shows how the different class can be deployed in a real distributed deployment. The clients are: the client node and the manager node. The other nodes can be identified as different servers. These servers can all be placed on different physical machines or grouped together (multiple possibilities).
 
 	\paragraph{6. How have you implemented the naming service, and what role does the built-in RMI registry play? Why did you take this approach?} \mbox{}\\\\
