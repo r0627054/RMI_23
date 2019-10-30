@@ -65,7 +65,18 @@ Closing of ReservationSessions happens when the client invokes the closeReservat
 
 	\paragraph{8. Why is a Java RMI application not thread-safe by default? How does your application of synchronization achieve thread-safety?} \mbox{}\\
 When two or more clients call the same function at the same time, unexpected behaviour can occur. This is due the way a CPU handles concurrency, which makes processes like this application temporarily pause, to give another process time to run. When the CPU is currently processing the first call of a method and decides to pause without this method finishing, it is possible another client will call the same method with uncertain behaviour. The exact behaviour depends on the instruction where the first stopped and is impossible to reliably tell what the end result will be.\\
-To achieve synchronization in Java, we have two choices: we either set the synchronized tag on the method declaration or we use the synchonized tag on a certain data structure. The first option means that if the client calls this function, the server will never pause this method during execution because of concurrency. The second option 'locks' a certain data structure for a certain amount of expressions, in which this object will never be able to be changed by another process that wishes to do so. This means the second option is a more loose option to do concurrency control since the CPU is still are able to pause for other processes, but only if they do not use this data structure.
+To achieve synchronization in Java, we have two choices: we either set the synchronized tag on the method declaration or we use the synchonized tag on a certain data structure. The first option means that if the client calls this function, the server will never pause this method during execution because of concurrency. The second option 'locks' a certain data structure for a certain amount of expressions, in which this object will never be able to be changed by another process that wishes to do so. This means the second option is a more loose option to do concurrency control since the CPU is still are able to pause for other processes, but only if they do not use this data structure.\\
+We have chosen to use the second approach on certain functions:
+\begin{itemize}
+	\item RentalAgency.createNewReservationSession
+	\item RentalAgency.createNewManagerSession
+	\item RentalAgency.closeReservationSession
+	\item RentalAgency.closeManagerSession
+	\item NamingService.registerCompany
+	\item NamingService.unregisterCompany
+	\item ReservationSession.createQuote
+\end{itemize} 
+
 
 	\paragraph{9. How does your solution to concurrency control aspect the scalability of your design? Could
 synchronization become a bottleneck?} \mbox{}\\
